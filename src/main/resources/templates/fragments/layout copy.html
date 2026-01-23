@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:fragment="layout(pageTitle, content, activePage)">
+<head>
+	<meta charset="UTF-8">
+	<title th:text="${pageTitle}">Dashboard</title>
+	<link rel="stylesheet" href="/css/admin.css">
+</head>
+<body>
+<div class="layout">
+	<aside class="sidebar">
+		<div class="brand">
+			<span class="brand-logo">ST</span>
+			<span class="brand-text">STROYKA</span>
+		</div>
+		<div class="menu-section">Application</div>
+		<nav class="menu">
+			<a class="menu-item"
+			   th:classappend="${activePage == 'dashboard'} ? ' active' : ''"
+			   href="/view">Dashboard</a>
+			<a class="menu-item"
+			   th:classappend="${activePage == 'products'} ? ' active' : ''"
+			   href="/view/products">Catalog</a>
+			<a class="menu-item"
+			   th:classappend="${activePage == 'customers'} ? ' active' : ''"
+			   href="/view/customers">Customers</a>
+			<a class="menu-item"
+			   th:classappend="${activePage == 'orders'} ? ' active' : ''"
+			   href="/view/orders">Orders</a>
+		</nav>
+		<div class="menu-section">Pages</div>
+		<nav class="menu">
+			<a class="menu-item" href="/login">Authentication</a>
+			<a class="menu-item" href="/register">Register</a>
+			<a class="menu-item" href="/logout">Logout</a>
+		</nav>
+	</aside>
+
+	<div class="main">
+		<header class="topbar">
+			<div class="topbar-left">
+				<h1 th:text="${pageTitle}">Dashboard</h1>
+				<p th:if="${displayName}">Welcome, <strong th:text="${displayName}">User</strong>.</p>
+			</div>
+			<div class="topbar-right">
+				<div class="search">
+					<span class="search-icon">🔍</span>
+					<input type="text" placeholder="Search for the truth">
+				</div>
+				<div class="date-chip">22 Jan, 2026</div>
+				<button class="btn">Export</button>
+			</div>
+		</header>
+
+		<main class="content" th:insert="${content}">
+			Content goes here.
+		</main>
+
+		<footer class="footer">
+			<span>Stroyka Admin • Ecommerce dashboard</span>
+			<span>© 2026</span>
+		</footer>
+	</div>
+</div>
+</body>
+</html>

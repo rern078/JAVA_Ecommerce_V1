@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	th:replace="fragments/layout :: layout('Products', ~{::section}, 'products')">
+<section>
+	<div class="container-xxl flex-grow-1 container-p-y">
+		<h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Products /</span> Product Form</h4>
+		<div class="row">
+			<div class="col-xl">
+				<div class="card mb-4">
+					<div class="card-header d-flex justify-content-between align-items-center">
+						<h5 class="mb-0">Product Form</h5>
+						<small class="text-muted float-end">Product Form</small>
+					</div>
+					<div class="card-body">
+						<form id="product-form">
+							<input type="hidden" id="product-id" />
+							<div class="row g-3">
+								<div class="mb-3 col-md-4">
+									<label class="form-label" for="product-name">Name</label>
+									<div class="input-group input-group-merge">
+										<span class="input-group-text">
+											<i class="bx bx-user"></i>
+										</span>
+										<input class="form-control" id="product-name"
+											placeholder="Product name" name="product-name" required />
+									</div>
+								</div>
+								<div class="mb-3 col-md-4">
+									<label class="form-label" for="product-price">Price</label>
+									<div class="input-group input-group-merge">
+										<span class="input-group-text">
+											<i class="bx bx-buildings"></i></span>
+										<input id="product-price" class="form-control" type="number"
+											step="0.01" min="0" placeholder="100.00" name="product-price"
+											aria-label="100.00" required />
+									</div>
+								</div>
+								<div class="mb-3 col-md-4">
+									<label class="form-label" for="product-stock">Stock</label>
+									<div class="input-group input-group-merge">
+										<span class="input-group-text"><i
+												class="bx bx-envelope"></i></span>
+										<input id="product-stock" class="form-control" type="number"
+											min="0" placeholder="100" name="product-stock"
+											aria-label="100" required />
+									</div>
+								</div>
+								<div class="mb-3 col-md-4">
+									<label class="form-label" for="product-sku">SKU</label>
+									<input class="form-control" id="product-sku" placeholder="SKU" />
+								</div>
+								<div class="mb-3 col-md-4">
+									<label class="form-label" for="product-id-sku">ID SKU</label>
+									<input class="form-control" id="product-id-sku" placeholder="ID SKU" />
+								</div>
+								<div class="mb-3 col-md-4">
+									<label class="form-label" for="product-vendor-id">Vendor Product ID</label>
+									<input class="form-control" id="product-vendor-id"
+										placeholder="Vendor Product ID" />
+								</div>
+								<div class="mb-3 col-md-4">
+									<label class="form-label" for="product-quantity-per-unit">Quantity Per Unit</label>
+									<input class="form-control" id="product-quantity-per-unit"
+										placeholder="Quantity per unit" />
+								</div>
+								<div class="mb-3 col-md-4">
+									<label class="form-label" for="product-msrp">MSRP</label>
+									<input class="form-control" id="product-msrp" type="number" step="0.01" min="0"
+										placeholder="0.00" />
+								</div>
+								<div class="mb-3 col-md-4">
+									<label class="form-label" for="product-discount">Discount</label>
+									<input class="form-control" id="product-discount" type="number" step="0.01"
+										min="0" placeholder="0.00" />
+								</div>
+								<div class="mb-3 col-md-4">
+									<label class="form-label" for="product-unit-weight">Unit Weight</label>
+									<input class="form-control" id="product-unit-weight" type="number" step="0.01"
+										min="0" placeholder="0.00" />
+								</div>
+								<div class="mb-3 col-md-4">
+									<label class="form-label" for="product-units-on-order">Units On Order</label>
+									<input class="form-control" id="product-units-on-order" type="number" min="0"
+										placeholder="0" />
+								</div>
+								<div class="mb-3 col-md-4">
+									<label class="form-label" for="product-reorder-level">Reorder Level</label>
+									<input class="form-control" id="product-reorder-level" type="number" min="0"
+										placeholder="0" />
+								</div>
+								<div class="mb-3 col-md-4">
+									<label class="form-label" for="product-available-size">Available Size</label>
+									<input class="form-control" id="product-available-size"
+										placeholder="S,M,L" />
+								</div>
+								<div class="mb-3 col-md-4">
+									<label class="form-label" for="product-available-colors">Available Colors</label>
+									<input class="form-control" id="product-available-colors"
+										placeholder="Red,Blue" />
+								</div>
+								<div class="mb-3 col-md-4">
+									<label class="form-label" for="product-size">Size</label>
+									<input class="form-control" id="product-size" placeholder="Size" />
+								</div>
+								<div class="mb-3 col-md-4">
+									<label class="form-label" for="product-color">Color</label>
+									<input class="form-control" id="product-color" placeholder="Color" />
+								</div>
+								<div class="mb-3 col-md-4">
+									<label class="form-label" for="product-picture">Picture</label>
+									<input class="form-control" id="product-picture" placeholder="Image URL" />
+								</div>
+								<div class="mb-3 col-md-4">
+									<label class="form-label" for="product-ranking">Ranking</label>
+									<input class="form-control" id="product-ranking" type="number" min="0"
+										placeholder="0" />
+								</div>
+								<div class="mb-3 col-md-4">
+									<label class="form-label" for="product-supplier-id">Supplier ID</label>
+									<input class="form-control" id="product-supplier-id" type="number" min="1"
+										placeholder="Supplier ID" />
+								</div>
+								<div class="mb-3 col-md-4">
+									<label class="form-label" for="product-category-id">Category ID</label>
+									<input class="form-control" id="product-category-id" type="number" min="1"
+										placeholder="Category ID" />
+								</div>
+								<div class="mb-3 col-md-4">
+									<label class="form-label" for="product-note">Note</label>
+									<input class="form-control" id="product-note" placeholder="Note" />
+								</div>
+								<div class="mb-3 col-md-12">
+									<label class="form-label" for="product-description">Description</label>
+									<div class="input-group input-group-merge">
+										<span class="input-group-text">
+											<i class="bx bx-comment"></i></span>
+										<textarea id="product-description" class="form-control"
+											placeholder="Description" name="product-description" required></textarea>
+									</div>
+								</div>
+								<div class="mb-3 col-md-12">
+									<label class="form-label" for="product-flags">Flags</label>
+									<div class="d-flex flex-wrap gap-3" id="product-flags">
+										<div class="form-check">
+											<input class="form-check-input" type="checkbox" id="product-available" />
+											<label class="form-check-label" for="product-available">
+												Product Available
+											</label>
+										</div>
+										<div class="form-check">
+											<input class="form-check-input" type="checkbox"
+												id="product-discount-available" />
+											<label class="form-check-label" for="product-discount-available">
+												Discount Available
+											</label>
+										</div>
+										<div class="form-check">
+											<input class="form-check-input" type="checkbox" id="product-current-order" />
+											<label class="form-check-label" for="product-current-order">
+												Current Order
+											</label>
+										</div>
+									</div>
+								</div>
+								<div class="col-12 d-flex gap-2">
+									<button class="btn btn-primary" type="submit"
+										id="product-submit">Add Product</button>
+									<button class="btn btn-outline-secondary" type="button"
+										id="product-reset">Clear</button>
+								</div>
+								<div class="col-12">
+									<small class="text-danger" id="product-error"
+										style="display:none;"></small>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="card">
+			<h5 class="card-header">Products List</h5>
+			<div class="table-responsive text-nowrap">
+				<table class="table">
+					<thead>
+						<tr>
+							<th>ID</th>
+							<th>Name</th>
+							<th>Price</th>
+							<th>Stock</th>
+							<th>Description</th>
+							<th>Status</th>
+							<th>Actions</th>
+						</tr>
+					</thead>
+					<tbody class="table-border-bottom-0">
+						<tr th:each="product : ${products}"
+							th:attr="data-id=${product.id},
+								data-name=${product.name},
+								data-price=${product.price},
+								data-stock=${product.stock},
+								data-description=${product.description},
+								data-supplier-id=${product.supplier != null ? product.supplier.id : null},
+								data-category-id=${product.category != null ? product.category.id : null},
+								data-sku=${product.sku},
+								data-id-sku=${product.idSku},
+								data-vendor-product-id=${product.vendorProductId},
+								data-quantity-per-unit=${product.quantityPerUnit},
+								data-msrp=${product.msrp},
+								data-available-size=${product.availableSize},
+								data-available-colors=${product.availableColors},
+								data-size=${product.size},
+								data-color=${product.color},
+								data-discount=${product.discount},
+								data-unit-weight=${product.unitWeight},
+								data-units-on-order=${product.unitsOnOrder},
+								data-reorder-level=${product.reorderLevel},
+								data-product-available=${product.productAvailable},
+								data-discount-available=${product.discountAvailable},
+								data-current-order=${product.currentOrder},
+								data-picture=${product.picture},
+								data-ranking=${product.ranking},
+								data-note=${product.note}">
+							<td>
+								<i class="fab fa-angular fa-lg text-danger me-3"></i>
+								<strong th:text="${product.id}"></strong>
+							</td>
+							<td th:text="${product.name}"></td>
+							<td th:text="${product.price}"></td>
+							<td th:text="${product.stock}"></td>
+							<td th:text="${product.description}"></td>
+							<td><span class="badge bg-label-primary me-1">Active</span></td>
+							<td>
+								<div class="dropdown">
+									<button type="button" class="btn p-0 dropdown-toggle hide-arrow"
+										data-bs-toggle="dropdown">
+										<i class="bx bx-dots-vertical-rounded"></i>
+									</button>
+									<div class="dropdown-menu">
+										<button class="dropdown-item btn-edit" type="button"><i
+												class="bx bx-edit-alt me-1"></i> Edit</button>
+										<button class="dropdown-item btn-delete" type="button"><i
+												class="bx bx-trash me-1"></i> Delete</button>
+									</div>
+								</div>
+							</td>
+						</tr>
+						<tr th:if="${#lists.isEmpty(products)}">
+							<td colspan="7">No products found.</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+		<hr class="my-5" />
+	</div>
+
+	<script>
+		(() => {
+			const form = document.getElementById("product-form");
+			const idInput = document.getElementById("product-id");
+			const nameInput = document.getElementById("product-name");
+			const priceInput = document.getElementById("product-price");
+			const stockInput = document.getElementById("product-stock");
+			const descInput = document.getElementById("product-description");
+			const skuInput = document.getElementById("product-sku");
+			const idSkuInput = document.getElementById("product-id-sku");
+			const vendorIdInput = document.getElementById("product-vendor-id");
+			const quantityPerUnitInput = document.getElementById("product-quantity-per-unit");
+			const msrpInput = document.getElementById("product-msrp");
+			const discountInput = document.getElementById("product-discount");
+			const unitWeightInput = document.getElementById("product-unit-weight");
+			const unitsOnOrderInput = document.getElementById("product-units-on-order");
+			const reorderLevelInput = document.getElementById("product-reorder-level");
+			const availableSizeInput = document.getElementById("product-available-size");
+			const availableColorsInput = document.getElementById("product-available-colors");
+			const sizeInput = document.getElementById("product-size");
+			const colorInput = document.getElementById("product-color");
+			const pictureInput = document.getElementById("product-picture");
+			const rankingInput = document.getElementById("product-ranking");
+			const supplierIdInput = document.getElementById("product-supplier-id");
+			const categoryIdInput = document.getElementById("product-category-id");
+			const noteInput = document.getElementById("product-note");
+			const availableInput = document.getElementById("product-available");
+			const discountAvailableInput = document.getElementById("product-discount-available");
+			const currentOrderInput = document.getElementById("product-current-order");
+			const resetBtn = document.getElementById("product-reset");
+			const submitBtn = document.getElementById("product-submit");
+			const errorEl = document.getElementById("product-error");
+
+			const parseOptionalNumber = (value) => {
+				if (value === null || value === undefined || value === "") {
+					return null;
+				}
+				const parsed = Number(value);
+				return Number.isNaN(parsed) ? null : parsed;
+			};
+
+			const clearForm = () => {
+				idInput.value = "";
+				nameInput.value = "";
+				priceInput.value = "";
+				stockInput.value = "";
+				descInput.value = "";
+				skuInput.value = "";
+				idSkuInput.value = "";
+				vendorIdInput.value = "";
+				quantityPerUnitInput.value = "";
+				msrpInput.value = "";
+				discountInput.value = "";
+				unitWeightInput.value = "";
+				unitsOnOrderInput.value = "";
+				reorderLevelInput.value = "";
+				availableSizeInput.value = "";
+				availableColorsInput.value = "";
+				sizeInput.value = "";
+				colorInput.value = "";
+				pictureInput.value = "";
+				rankingInput.value = "";
+				supplierIdInput.value = "";
+				categoryIdInput.value = "";
+				noteInput.value = "";
+				availableInput.checked = false;
+				discountAvailableInput.checked = false;
+				currentOrderInput.checked = false;
+				submitBtn.textContent = "Add Product";
+				errorEl.style.display = "none";
+				errorEl.textContent = "";
+			};
+
+			const showError = (message) => {
+				errorEl.textContent = message;
+				errorEl.style.display = "block";
+			};
+
+			form.addEventListener("submit", async (event) => {
+				event.preventDefault();
+				errorEl.style.display = "none";
+
+				const payload = {
+					name: nameInput.value.trim(),
+					description: descInput.value.trim() || null,
+					price: parseOptionalNumber(priceInput.value),
+					stock: parseOptionalNumber(stockInput.value) ?? 0,
+					supplierId: parseOptionalNumber(supplierIdInput.value),
+					categoryId: parseOptionalNumber(categoryIdInput.value),
+					sku: skuInput.value.trim() || null,
+					idSku: idSkuInput.value.trim() || null,
+					vendorProductId: vendorIdInput.value.trim() || null,
+					quantityPerUnit: quantityPerUnitInput.value.trim() || null,
+					msrp: parseOptionalNumber(msrpInput.value),
+					availableSize: availableSizeInput.value.trim() || null,
+					availableColors: availableColorsInput.value.trim() || null,
+					size: sizeInput.value.trim() || null,
+					color: colorInput.value.trim() || null,
+					discount: parseOptionalNumber(discountInput.value),
+					unitWeight: parseOptionalNumber(unitWeightInput.value),
+					unitsOnOrder: parseOptionalNumber(unitsOnOrderInput.value),
+					reorderLevel: parseOptionalNumber(reorderLevelInput.value),
+					productAvailable: availableInput.checked,
+					discountAvailable: discountAvailableInput.checked,
+					currentOrder: currentOrderInput.checked,
+					picture: pictureInput.value.trim() || null,
+					ranking: parseOptionalNumber(rankingInput.value),
+					note: noteInput.value.trim() || null
+				};
+
+				try {
+					const id = idInput.value;
+					const url = id ? `/api/products/${id}` : "/api/products";
+					const method = id ? "PUT" : "POST";
+					const response = await fetch(url, {
+						method,
+						headers: { "Content-Type": "application/json" },
+						body: JSON.stringify(payload)
+					});
+
+					if (!response.ok) {
+						const text = await response.text();
+						throw new Error(text || "Save failed.");
+					}
+
+					window.location.reload();
+				} catch (err) {
+					showError(err.message || "Something went wrong.");
+				}
+			});
+
+			resetBtn.addEventListener("click", clearForm);
+
+			document.querySelectorAll(".btn-edit").forEach((btn) => {
+				btn.addEventListener("click", () => {
+					const row = btn.closest("tr");
+					idInput.value = row.dataset.id || "";
+					nameInput.value = row.dataset.name || "";
+					priceInput.value = row.dataset.price || "";
+					stockInput.value = row.dataset.stock || "";
+					descInput.value = row.dataset.description || "";
+					skuInput.value = row.dataset.sku || "";
+					idSkuInput.value = row.dataset.idSku || "";
+					vendorIdInput.value = row.dataset.vendorProductId || "";
+					quantityPerUnitInput.value = row.dataset.quantityPerUnit || "";
+					msrpInput.value = row.dataset.msrp || "";
+					availableSizeInput.value = row.dataset.availableSize || "";
+					availableColorsInput.value = row.dataset.availableColors || "";
+					sizeInput.value = row.dataset.size || "";
+					colorInput.value = row.dataset.color || "";
+					discountInput.value = row.dataset.discount || "";
+					unitWeightInput.value = row.dataset.unitWeight || "";
+					unitsOnOrderInput.value = row.dataset.unitsOnOrder || "";
+					reorderLevelInput.value = row.dataset.reorderLevel || "";
+					availableInput.checked = row.dataset.productAvailable === "true";
+					discountAvailableInput.checked = row.dataset.discountAvailable === "true";
+					currentOrderInput.checked = row.dataset.currentOrder === "true";
+					pictureInput.value = row.dataset.picture || "";
+					rankingInput.value = row.dataset.ranking || "";
+					supplierIdInput.value = row.dataset.supplierId || "";
+					categoryIdInput.value = row.dataset.categoryId || "";
+					noteInput.value = row.dataset.note || "";
+					submitBtn.textContent = "Update Product";
+					errorEl.style.display = "none";
+				});
+			});
+
+			document.querySelectorAll(".btn-delete").forEach((btn) => {
+				btn.addEventListener("click", async () => {
+					const row = btn.closest("tr");
+					const id = row.dataset.id;
+					if (!id) {
+						return;
+					}
+					if (!confirm("Delete this product?")) {
+						return;
+					}
+					try {
+						const response = await fetch(`/api/products/${id}`, { method: "DELETE" });
+						if (!response.ok) {
+							const text = await response.text();
+							throw new Error(text || "Delete failed.");
+						}
+						window.location.reload();
+					} catch (err) {
+						showError(err.message || "Something went wrong.");
+					}
+				});
+			});
+		})();
+	</script>
+</section>
+
+</html>

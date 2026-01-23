@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="fragments/layout :: layout('Customers', ~{::section}, 'customers')">
+<section>
+	<div class="page-actions">
+		<a class="link" href="/view">Back to dashboard</a>
+	</div>
+	<div class="panel">
+		<div class="panel-title">Customers</div>
+		<table class="data-table">
+			<thead>
+			<tr>
+				<th>ID</th>
+				<th>Name</th>
+				<th>Email</th>
+				<th>Address</th>
+			</tr>
+			</thead>
+			<tbody>
+			<tr th:each="customer : ${customers}">
+				<td th:text="${customer.id}">1</td>
+				<td th:text="${customer.name}">Name</td>
+				<td th:text="${customer.email}">email@example.com</td>
+				<td th:text="${customer.address}">Address</td>
+			</tr>
+			<tr th:if="${#lists.isEmpty(customers)}">
+				<td colspan="4">No customers found.</td>
+			</tr>
+			</tbody>
+		</table>
+	</div>
+</section>
+</html>

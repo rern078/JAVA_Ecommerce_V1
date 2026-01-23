@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="fragments/layout :: layout('Orders', ~{::section}, 'orders')">
+<section>
+	<div class="page-actions">
+		<a class="link" href="/view">Back to dashboard</a>
+	</div>
+	<div class="panel">
+		<div class="panel-title">Orders</div>
+		<table class="data-table">
+			<thead>
+			<tr>
+				<th>ID</th>
+				<th>Customer</th>
+				<th>Status</th>
+				<th>Total</th>
+				<th>Items</th>
+			</tr>
+			</thead>
+			<tbody>
+			<tr th:each="order : ${orders}">
+				<td th:text="${order.id}">1</td>
+				<td th:text="${order.customer.id}">1</td>
+				<td th:text="${order.status}">NEW</td>
+				<td th:text="${order.total}">0.00</td>
+				<td>
+					<ul class="items">
+						<li th:each="item : ${order.items}"
+							th:text="${item.product.name} + ' x' + ${item.quantity} + ' (' + ${item.lineTotal} + ')'">
+							Product x1 (0.00)
+						</li>
+						<li th:if="${#lists.isEmpty(order.items)}">No items</li>
+					</ul>
+				</td>
+			</tr>
+			<tr th:if="${#lists.isEmpty(orders)}">
+				<td colspan="5">No orders found.</td>
+			</tr>
+			</tbody>
+		</table>
+	</div>
+</section>
+</html>
