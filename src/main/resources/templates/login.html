@@ -1,31 +1,39 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
+
 <head>
 	<meta charset="UTF-8">
 	<title>Login</title>
-	<style>
-		body { font-family: Arial, sans-serif; margin: 24px; color: #1f2937; }
-		.container { max-width: 380px; margin: 40px auto; border: 1px solid #e2e8f0; padding: 20px; border-radius: 8px; }
-		label { display: block; margin-top: 12px; }
-		input { width: 100%; padding: 8px; margin-top: 6px; }
-		button { margin-top: 16px; width: 100%; padding: 10px; }
-		.error { color: #b91c1c; margin-top: 10px; }
-	</style>
+	<link rel="stylesheet" href="/css/auth.css">
+	<link href='https://unpkg.com/boxicons/css/boxicons.min.css' rel='stylesheet'>
 </head>
+
 <body>
-<div class="container">
-	<h2>Login</h2>
-	<form method="post" action="/login">
-		<label>Email
-			<input type="email" name="email" required>
-		</label>
-		<label>Password
-			<input type="password" name="password" required>
-		</label>
-		<button type="submit">Login</button>
-	</form>
-	<p class="error" th:if="${error}" th:text="${error}">Invalid email or password.</p>
-	<p>New here? <a href="/register">Create an account</a></p>
-</div>
+
+	<div class="login-container">
+		<div class="profile-img"></div>
+		<h2>CRN TechDev</h2>
+		<p>Login to your account</p>
+
+		<form method="post" action="/login">
+			<div class="input-field">
+				<i class="bx bx-envelope"></i>
+				<input type="email" name="email" placeholder="Enter Your Email" required>
+			</div>
+
+			<div class="input-field">
+				<i class="bx bx-lock"></i>
+				<input type="password" name="password" placeholder="Enter Your Password" required>
+			</div>
+
+			<button class="btn" type="submit">Login</button>
+
+			<div class="options">
+				Forgot password? <a href="/register">or Sign Up</a>
+			</div>
+		</form>
+		<p class="error" th:if="${error}" th:text="${error}">Invalid email or password.</p>
+	</div>
 </body>
+
 </html>
