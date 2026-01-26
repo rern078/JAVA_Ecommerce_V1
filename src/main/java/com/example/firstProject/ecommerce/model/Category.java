@@ -20,6 +20,8 @@ public class Category {
 	@Column(length = 2000)
 	private String description;
 
+	// @Column(columnDefinition = "TEXT")
+	@Column(nullable = true)
 	private String picture;
 
 	@Column(name = "active")

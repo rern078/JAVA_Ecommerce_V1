@@ -1,5 +1,5 @@
 CREATE TABLE IF NOT EXISTS users (
-	id BIGINT AUTO_INCREMENT PRIMARY KEY,
+	id BIGSERIAL PRIMARY KEY,
 	name VARCHAR(255) NOT NULL,
 	email VARCHAR(255) NOT NULL,
 	password_hash VARCHAR(100) NOT NULL,
@@ -7,7 +7,7 @@ CREATE TABLE IF NOT EXISTS users (
 );
 
 CREATE TABLE IF NOT EXISTS suppliers (
-	id BIGINT AUTO_INCREMENT PRIMARY KEY,
+	id BIGSERIAL PRIMARY KEY,
 	company_name VARCHAR(255) NOT NULL,
 	contact_name VARCHAR(255),
 	contact_title VARCHAR(255),
@@ -21,16 +21,16 @@ CREATE TABLE IF NOT EXISTS suppliers (
 	fax VARCHAR(100),
 	email VARCHAR(255),
 	url VARCHAR(255),
-	notes CLOB
+	notes TEXT
 );
 
 CREATE TABLE IF NOT EXISTS categories (
-	id BIGINT AUTO_INCREMENT PRIMARY KEY,
+	id BIGSERIAL PRIMARY KEY,
 	parent_id BIGINT,
 	category_name VARCHAR(255) NOT NULL,
-	category_description CLOB,
-	icon CLOB,
-	image_path CLOB,
+	description TEXT,
+	icon TEXT,
+	picture TEXT,
 	active BOOLEAN,
 	created_at TIMESTAMP,
 	updated_at TIMESTAMP,
@@ -39,9 +39,9 @@ CREATE TABLE IF NOT EXISTS categories (
 );
 
 CREATE TABLE IF NOT EXISTS tags (
-	id INT AUTO_INCREMENT PRIMARY KEY,
+	id SERIAL PRIMARY KEY,
 	tag_name VARCHAR(255),
-	icon CLOB,
+	icon TEXT,
 	created_at TIMESTAMP,
 	updated_at TIMESTAMP,
 	created_by UUID,
@@ -67,14 +67,14 @@ CREATE TABLE IF NOT EXISTS attribute_values (
 );
 
 CREATE TABLE IF NOT EXISTS products (
-	id BIGINT AUTO_INCREMENT PRIMARY KEY,
+	id BIGSERIAL PRIMARY KEY,
 	product_name VARCHAR(255) NOT NULL,
 	sku VARCHAR(255),
 	regular_price NUMERIC,
 	discount_price NUMERIC,
 	quantity INT,
 	short_description VARCHAR(165),
-	product_description CLOB,
+	product_description TEXT,
 	product_weight NUMERIC,
 	product_note VARCHAR(255),
 	published BOOLEAN,
@@ -98,8 +98,9 @@ CREATE TABLE IF NOT EXISTS products (
 	discount_available BOOLEAN,
 	current_order BOOLEAN,
 	picture VARCHAR(255),
+	product_gallery TEXT,
 	ranking INT,
-	note CLOB,
+	note TEXT,
 	created_at TIMESTAMP,
 	updated_at TIMESTAMP,
 	created_by UUID,
@@ -166,9 +167,9 @@ CREATE TABLE IF NOT EXISTS variant_attribute_values (
 );
 
 CREATE TABLE IF NOT EXISTS coupons (
-	id INT AUTO_INCREMENT PRIMARY KEY,
+	id SERIAL PRIMARY KEY,
 	code VARCHAR(255),
-	coupon_description CLOB,
+	coupon_description TEXT,
 	discount_value NUMERIC,
 	discount_type VARCHAR(50),
 	times_used INT,
@@ -194,7 +195,7 @@ CREATE TABLE IF NOT EXISTS product_coupons (
 CREATE TABLE IF NOT EXISTS galleries (
 	id UUID PRIMARY KEY,
 	product_id BIGINT,
-	image_path CLOB,
+	image_path TEXT,
 	thumbnail BOOLEAN,
 	display_order SMALLINT,
 	created_at TIMESTAMP,
@@ -215,10 +216,10 @@ CREATE TABLE IF NOT EXISTS sells (
 );
 
 CREATE TABLE IF NOT EXISTS shippings (
-	id INT AUTO_INCREMENT PRIMARY KEY,
-	name CLOB,
+	id SERIAL PRIMARY KEY,
+	name TEXT,
 	active BOOLEAN,
-	icon_path CLOB,
+	icon_path TEXT,
 	created_at TIMESTAMP,
 	updated_at TIMESTAMP,
 	created_by UUID,
@@ -239,20 +240,20 @@ CREATE TABLE IF NOT EXISTS product_shippings (
 );
 
 CREATE TABLE IF NOT EXISTS customers (
-	id BIGINT AUTO_INCREMENT PRIMARY KEY,
+	id BIGSERIAL PRIMARY KEY,
 	first_name VARCHAR(100),
 	last_name VARCHAR(100),
 	phone_number VARCHAR(255),
-	email CLOB,
-	password_hash CLOB,
+	email TEXT,
+	password_hash TEXT,
 	active BOOLEAN,
 	registered_at TIMESTAMP,
 	created_at TIMESTAMP,
 	class VARCHAR(255),
 	room VARCHAR(255),
 	building VARCHAR(255),
-	address1 CLOB,
-	address2 CLOB,
+	address1 TEXT,
+	address2 TEXT,
 	city VARCHAR(255),
 	state VARCHAR(255),
 	postal_code VARCHAR(50),
@@ -264,24 +265,24 @@ CREATE TABLE IF NOT EXISTS customers (
 	credit_card_type_id VARCHAR(255),
 	card_exp_mo VARCHAR(50),
 	card_exp_yr VARCHAR(50),
-	billing_address CLOB,
+	billing_address TEXT,
 	billing_city VARCHAR(255),
 	billing_region VARCHAR(255),
 	billing_postal_code VARCHAR(50),
 	billing_country VARCHAR(255),
-	ship_address CLOB,
+	ship_address TEXT,
 	ship_city VARCHAR(255),
 	ship_region VARCHAR(255),
 	ship_postal_code VARCHAR(50),
 	ship_country VARCHAR(255),
-	address CLOB
+	address TEXT
 );
 
 CREATE TABLE IF NOT EXISTS customer_addresses (
 	id UUID PRIMARY KEY,
 	customer_id BIGINT,
-	address_line1 CLOB,
-	address_line2 CLOB,
+	address_line1 TEXT,
+	address_line2 TEXT,
 	postal_code VARCHAR(255),
 	country VARCHAR(255),
 	city VARCHAR(255),
@@ -309,7 +310,7 @@ CREATE TABLE IF NOT EXISTS card_items (
 );
 
 CREATE TABLE IF NOT EXISTS order_statuses (
-	id INT AUTO_INCREMENT PRIMARY KEY,
+	id SERIAL PRIMARY KEY,
 	status_name VARCHAR(255),
 	color VARCHAR(50),
 	privacy VARCHAR(50),
@@ -320,19 +321,19 @@ CREATE TABLE IF NOT EXISTS order_statuses (
 );
 
 CREATE TABLE IF NOT EXISTS payment (
-	id BIGINT AUTO_INCREMENT PRIMARY KEY,
+	id BIGSERIAL PRIMARY KEY,
 	payment_type VARCHAR(255) NOT NULL,
 	allowed BOOLEAN
 );
 
 CREATE TABLE IF NOT EXISTS shippers (
-	id BIGINT AUTO_INCREMENT PRIMARY KEY,
+	id BIGSERIAL PRIMARY KEY,
 	company_name VARCHAR(255) NOT NULL,
 	phone VARCHAR(100)
 );
 
 CREATE TABLE IF NOT EXISTS orders (
-	id BIGINT AUTO_INCREMENT PRIMARY KEY,
+	id BIGSERIAL PRIMARY KEY,
 	coupon_id INT,
 	customer_id BIGINT,
 	order_status_id INT,
@@ -352,7 +353,7 @@ CREATE TABLE IF NOT EXISTS orders (
 	timestamp TIMESTAMP,
 	transact_status VARCHAR(255),
 	err_loc VARCHAR(255),
-	err_msg CLOB,
+	err_msg TEXT,
 	fulfilled BOOLEAN,
 	deleted BOOLEAN,
 	paid BOOLEAN,
@@ -371,7 +372,7 @@ CREATE TABLE IF NOT EXISTS orders (
 );
 
 CREATE TABLE IF NOT EXISTS order_items (
-	id BIGINT AUTO_INCREMENT PRIMARY KEY,
+	id BIGSERIAL PRIMARY KEY,
 	product_id BIGINT,
 	order_id BIGINT,
 	price NUMERIC,
@@ -394,9 +395,9 @@ CREATE TABLE IF NOT EXISTS order_items (
 );
 
 CREATE TABLE IF NOT EXISTS roles (
-	id INT AUTO_INCREMENT PRIMARY KEY,
+	id SERIAL PRIMARY KEY,
 	role_name VARCHAR(255),
-	privileges CLOB,
+	privileges TEXT,
 	created_at TIMESTAMP,
 	updated_at TIMESTAMP,
 	created_by UUID,
@@ -409,9 +410,9 @@ CREATE TABLE IF NOT EXISTS staff_accounts (
 	last_name VARCHAR(100),
 	phone_number VARCHAR(255),
 	email VARCHAR(255),
-	password_hash CLOB,
+	password_hash TEXT,
 	active BOOLEAN,
-	profile_img CLOB,
+	profile_img TEXT,
 	registered_at TIMESTAMP,
 	updated_at TIMESTAMP,
 	created_by UUID,
@@ -432,7 +433,7 @@ CREATE TABLE IF NOT EXISTS notifications (
 	id UUID PRIMARY KEY,
 	account_id UUID,
 	title VARCHAR(100),
-	content CLOB,
+	content TEXT,
 	seen BOOLEAN,
 	created_at TIMESTAMP,
 	receive_time TIME,
@@ -443,8 +444,8 @@ CREATE TABLE IF NOT EXISTS notifications (
 
 CREATE TABLE IF NOT EXISTS slideshows (
 	id UUID PRIMARY KEY,
-	destination_url CLOB,
-	image_url CLOB,
+	destination_url TEXT,
+	image_url TEXT,
 	clicks SMALLINT,
 	created_at TIMESTAMP,
 	updated_at TIMESTAMP,
@@ -452,26 +453,26 @@ CREATE TABLE IF NOT EXISTS slideshows (
 	updated_by UUID
 );
 
-CREATE VIEW IF NOT EXISTS product_shipping AS
+CREATE OR REPLACE VIEW product_shipping AS
 	SELECT * FROM product_shippings;
 
-CREATE VIEW IF NOT EXISTS products_attributes AS
+CREATE OR REPLACE VIEW products_attributes AS
 	SELECT * FROM product_attributes;
 
-CREATE VIEW IF NOT EXISTS cart_items AS
+CREATE OR REPLACE VIEW cart_items AS
 	SELECT * FROM card_items;
 
-CREATE VIEW IF NOT EXISTS notification AS
+CREATE OR REPLACE VIEW notification AS
 	SELECT * FROM notifications;
 
-CREATE VIEW IF NOT EXISTS slideshow AS
+CREATE OR REPLACE VIEW slideshow AS
 	SELECT * FROM slideshows;
 
-CREATE VIEW IF NOT EXISTS attribute AS
+CREATE OR REPLACE VIEW attribute AS
 	SELECT * FROM attributes;
 
-CREATE VIEW IF NOT EXISTS "values" AS
+CREATE OR REPLACE VIEW "values" AS
 	SELECT * FROM attribute_values;
 
-CREATE VIEW IF NOT EXISTS "order" AS
+CREATE OR REPLACE VIEW "order" AS
 	SELECT * FROM orders;

@@ -7,16 +7,16 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class ShortcutViewController {
 	@GetMapping("/products")
 	public String products() {
-		return "redirect:/view/products";
+		return "redirect:/dashboard/products";
 	}
 
 	@GetMapping("/customers")
 	public String customers() {
-		return "redirect:/view/customers";
+		return "redirect:/dashboard/customers";
 	}
 
 	@GetMapping("/orders")
 	public String orders() {
-		return "redirect:/view/orders";
+		return "redirect:/dashboard/orders";
 	}
 }

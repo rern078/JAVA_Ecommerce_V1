@@ -108,7 +108,19 @@
 								</div>
 								<div class="mb-3 col-md-4">
 									<label class="form-label" for="product-picture">Picture</label>
-									<input class="form-control" id="product-picture" placeholder="Image URL" />
+									<input class="form-control" id="product-picture" type="file" accept="image/*" />
+									<input id="product-picture-existing" type="hidden" />
+									<div class="mt-2">
+										<img id="product-picture-preview" alt="Preview"
+											style="max-height: 80px; display: none;" />
+									</div>
+								</div>
+								<div class="mb-3 col-md-4">
+									<label class="form-label" for="product-gallery">Product Gallery</label>
+									<input class="form-control" id="product-gallery" type="file" accept="image/*"
+										multiple />
+									<input id="product-gallery-existing" type="hidden" />
+									<div class="mt-2 d-flex flex-wrap gap-2" id="product-gallery-preview"></div>
 								</div>
 								<div class="mb-3 col-md-4">
 									<label class="form-label" for="product-ranking">Ranking</label>
@@ -121,9 +133,15 @@
 										placeholder="Supplier ID" />
 								</div>
 								<div class="mb-3 col-md-4">
-									<label class="form-label" for="product-category-id">Category ID</label>
-									<input class="form-control" id="product-category-id" type="number" min="1"
-										placeholder="Category ID" />
+									<label class="form-label" for="product-category-id">Category</label>
+									<select class="form-select" id="product-category-id">
+										<option value="">Select category</option>
+										<option th:each="category : ${categories}"
+											th:if="${category.active}"
+											th:value="${category.id}"
+											th:text="${category.categoryName}">
+										</option>
+									</select>
 								</div>
 								<div class="mb-3 col-md-4">
 									<label class="form-label" for="product-note">Note</label>
@@ -219,6 +237,7 @@
 								data-discount-available=${product.discountAvailable},
 								data-current-order=${product.currentOrder},
 								data-picture=${product.picture},
+								data-product-gallery=${product.productGallery},
 								data-ranking=${product.ranking},
 								data-note=${product.note}">
 							<td>
@@ -239,6 +258,8 @@
 									<div class="dropdown-menu">
 										<button class="dropdown-item btn-edit" type="button"><i
 												class="bx bx-edit-alt me-1"></i> Edit</button>
+										<button class="dropdown-item btn-gallery" type="button"><i
+												class="bx bx-image me-1"></i> Images</button>
 										<button class="dropdown-item btn-delete" type="button"><i
 												class="bx bx-trash me-1"></i> Delete</button>
 									</div>
@@ -252,7 +273,30 @@
 				</table>
 			</div>
 		</div>
-		<hr class="my-5" />
+	<hr class="my-5" />
+	</div>
+
+	<div class="modal fade" id="gallery-modal" tabindex="-1" aria-hidden="true">
+		<div class="modal-dialog modal-lg modal-dialog-centered">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">Product Images</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<div class="modal-body">
+					<input type="hidden" id="gallery-product-id" />
+					<div class="mb-3">
+						<label class="form-label" for="product-gallery-files">Upload images</label>
+						<input class="form-control" id="product-gallery-files" type="file" accept="image/*" multiple />
+					</div>
+					<div class="mb-3 d-flex gap-2">
+						<button class="btn btn-primary" type="button" id="gallery-upload">Upload</button>
+						<small class="text-danger align-self-center" id="gallery-error" style="display:none;"></small>
+					</div>
+					<div id="gallery-list" class="d-flex flex-wrap gap-2"></div>
+				</div>
+			</div>
+		</div>
 	</div>
 
 	<script>
@@ -277,6 +321,11 @@
 			const sizeInput = document.getElementById("product-size");
 			const colorInput = document.getElementById("product-color");
 			const pictureInput = document.getElementById("product-picture");
+			const existingPictureInput = document.getElementById("product-picture-existing");
+			const picturePreview = document.getElementById("product-picture-preview");
+			const productGalleryInput = document.getElementById("product-gallery");
+			const existingGalleryInput = document.getElementById("product-gallery-existing");
+			const galleryPreview = document.getElementById("product-gallery-preview");
 			const rankingInput = document.getElementById("product-ranking");
 			const supplierIdInput = document.getElementById("product-supplier-id");
 			const categoryIdInput = document.getElementById("product-category-id");
@@ -287,6 +336,12 @@
 			const resetBtn = document.getElementById("product-reset");
 			const submitBtn = document.getElementById("product-submit");
 			const errorEl = document.getElementById("product-error");
+			const galleryModalEl = document.getElementById("gallery-modal");
+			const galleryProductIdInput = document.getElementById("gallery-product-id");
+			const galleryFilesInput = document.getElementById("product-gallery-files");
+			const galleryUploadBtn = document.getElementById("gallery-upload");
+			const galleryList = document.getElementById("gallery-list");
+			const galleryErrorEl = document.getElementById("gallery-error");
 
 			const parseOptionalNumber = (value) => {
 				if (value === null || value === undefined || value === "") {
@@ -316,6 +371,12 @@
 				sizeInput.value = "";
 				colorInput.value = "";
 				pictureInput.value = "";
+				existingPictureInput.value = "";
+				picturePreview.src = "";
+				picturePreview.style.display = "none";
+				productGalleryInput.value = "";
+				existingGalleryInput.value = "";
+				galleryPreview.innerHTML = "";
 				rankingInput.value = "";
 				supplierIdInput.value = "";
 				categoryIdInput.value = "";
@@ -333,9 +394,131 @@
 				errorEl.style.display = "block";
 			};
 
+			const uploadImage = async (file) => {
+				const formData = new FormData();
+				formData.append("file", file);
+				const response = await fetch("/api/uploads/products", {
+					method: "POST",
+					body: formData
+				});
+				if (!response.ok) {
+					const text = await response.text();
+					throw new Error(text || "Image upload failed.");
+				}
+				const data = await response.json();
+				return data.url;
+			};
+
+			const uploadImages = async (files) => {
+				const uploads = await Promise.all(
+					files.map((file) => uploadImage(file))
+				);
+				return uploads;
+			};
+
+			pictureInput.addEventListener("change", () => {
+				const selectedFile = pictureInput.files && pictureInput.files[0];
+				if (!selectedFile) {
+					picturePreview.src = "";
+					picturePreview.style.display = "none";
+					return;
+				}
+				const previewUrl = URL.createObjectURL(selectedFile);
+				picturePreview.src = previewUrl;
+				picturePreview.style.display = "inline-block";
+			});
+
+			productGalleryInput.addEventListener("change", () => {
+				const files = Array.from(productGalleryInput.files || []);
+				galleryPreview.innerHTML = "";
+				if (files.length === 0) {
+					return;
+				}
+				files.forEach((file) => {
+					const img = document.createElement("img");
+					img.src = URL.createObjectURL(file);
+					img.alt = "Gallery image";
+					img.style.maxHeight = "60px";
+					img.style.borderRadius = "4px";
+					galleryPreview.appendChild(img);
+				});
+			});
+
+			const renderGallery = (galleryValue) => {
+				galleryList.innerHTML = "";
+				if (!galleryValue) {
+					return;
+				}
+				galleryValue
+					.split(",")
+					.map((value) => value.trim())
+					.filter((value) => value.length > 0)
+					.forEach((url) => {
+						const img = document.createElement("img");
+						img.src = url;
+						img.alt = "Gallery image";
+						img.style.maxHeight = "80px";
+						img.style.borderRadius = "4px";
+						galleryList.appendChild(img);
+					});
+			};
+
+			const showGalleryError = (message) => {
+				galleryErrorEl.textContent = message;
+				galleryErrorEl.style.display = "block";
+			};
+
+			galleryUploadBtn.addEventListener("click", async () => {
+				const productId = galleryProductIdInput.value;
+				if (!productId) {
+					return;
+				}
+				const files = Array.from(galleryFilesInput.files || []);
+				if (files.length === 0) {
+					showGalleryError("Please select images to upload.");
+					return;
+				}
+				try {
+					galleryErrorEl.style.display = "none";
+					const urls = await uploadImages(files);
+					const response = await fetch(`/api/products/${productId}/gallery-urls`, {
+						method: "PUT",
+						headers: { "Content-Type": "application/json" },
+						body: JSON.stringify({ urls })
+					});
+					if (!response.ok) {
+						const text = await response.text();
+						throw new Error(text || "Update failed.");
+					}
+					const updated = await response.json();
+					galleryFilesInput.value = "";
+					const row = document.querySelector(`tr[data-id="${productId}"]`);
+					if (row) {
+						row.dataset.productGallery = updated.productGallery || "";
+					}
+					existingGalleryInput.value = updated.productGallery || "";
+					renderGallery(existingGalleryInput.value);
+				} catch (err) {
+					showGalleryError(err.message || "Upload failed.");
+				}
+			});
+
 			form.addEventListener("submit", async (event) => {
 				event.preventDefault();
 				errorEl.style.display = "none";
+
+				const selectedFile = pictureInput.files && pictureInput.files[0];
+				let pictureValue = existingPictureInput.value.trim() || null;
+				if (selectedFile) {
+					pictureValue = await uploadImage(selectedFile);
+				}
+
+				const galleryFiles = Array.from(productGalleryInput.files || []);
+				let galleryValue = existingGalleryInput.value.trim() || null;
+				if (galleryFiles.length > 0) {
+					const urls = await uploadImages(galleryFiles);
+					galleryValue = urls.join(",");
+				}
 
 				const payload = {
 					name: nameInput.value.trim(),
@@ -360,7 +543,8 @@
 					productAvailable: availableInput.checked,
 					discountAvailable: discountAvailableInput.checked,
 					currentOrder: currentOrderInput.checked,
-					picture: pictureInput.value.trim() || null,
+					picture: pictureValue,
+					productGallery: galleryValue,
 					ranking: parseOptionalNumber(rankingInput.value),
 					note: noteInput.value.trim() || null
 				};
@@ -412,13 +596,55 @@
 					availableInput.checked = row.dataset.productAvailable === "true";
 					discountAvailableInput.checked = row.dataset.discountAvailable === "true";
 					currentOrderInput.checked = row.dataset.currentOrder === "true";
-					pictureInput.value = row.dataset.picture || "";
+					existingPictureInput.value = row.dataset.picture || "";
+					pictureInput.value = "";
+					if (existingPictureInput.value) {
+						picturePreview.src = existingPictureInput.value;
+						picturePreview.style.display = "inline-block";
+					} else {
+						picturePreview.src = "";
+						picturePreview.style.display = "none";
+					}
+					existingGalleryInput.value = row.dataset.productGallery || "";
+					productGalleryInput.value = "";
+					galleryPreview.innerHTML = "";
+					if (existingGalleryInput.value) {
+						existingGalleryInput.value
+							.split(",")
+							.map((value) => value.trim())
+							.filter((value) => value.length > 0)
+							.forEach((url) => {
+								const img = document.createElement("img");
+								img.src = url;
+								img.alt = "Gallery image";
+								img.style.maxHeight = "60px";
+								img.style.borderRadius = "4px";
+								galleryPreview.appendChild(img);
+							});
+					}
 					rankingInput.value = row.dataset.ranking || "";
 					supplierIdInput.value = row.dataset.supplierId || "";
 					categoryIdInput.value = row.dataset.categoryId || "";
 					noteInput.value = row.dataset.note || "";
 					submitBtn.textContent = "Update Product";
 					errorEl.style.display = "none";
+				});
+			});
+
+			document.querySelectorAll(".btn-gallery").forEach((btn) => {
+				btn.addEventListener("click", async () => {
+					const row = btn.closest("tr");
+					const id = row.dataset.id;
+					if (!id) {
+						return;
+					}
+					galleryProductIdInput.value = id;
+					galleryFilesInput.value = "";
+					const currentGallery = row ? row.dataset.productGallery : "";
+					existingGalleryInput.value = currentGallery || "";
+					renderGallery(existingGalleryInput.value);
+					const modal = new bootstrap.Modal(galleryModalEl);
+					modal.show();
 				});
 			});
 

@@ -88,6 +88,9 @@ public class Product {
 	@Column(name = "picture")
 	private String picture;
 
+	@Column(name = "product_gallery", columnDefinition = "TEXT")
+	private String productGallery;
+
 	private Integer ranking;
 
 	@Column(length = 2000)
@@ -299,6 +302,14 @@ public class Product {
 
 	public void setPicture(String picture) {
 		this.picture = picture;
+	}
+
+	public String getProductGallery() {
+		return productGallery;
+	}
+
+	public void setProductGallery(String productGallery) {
+		this.productGallery = productGallery;
 	}
 
 	public Integer getRanking() {

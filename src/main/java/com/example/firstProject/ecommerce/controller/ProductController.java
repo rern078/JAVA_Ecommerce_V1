@@ -6,6 +6,7 @@ import com.example.firstProject.ecommerce.dto.UpdateProductRequest;
 import com.example.firstProject.ecommerce.model.Product;
 import com.example.firstProject.ecommerce.service.CatalogService;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotEmpty;
 import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -57,6 +58,16 @@ public class ProductController {
 		return ResponseEntity.noContent().build();
 	}
 
+	@PutMapping("/{id}/gallery-urls")
+	public ProductResponse appendGallery(@PathVariable Long id,
+										 @Valid @RequestBody GalleryUrlsRequest request) {
+		Product updated = catalogService.appendProductGallery(id, request.urls());
+		return toResponse(updated);
+	}
+
+	public record GalleryUrlsRequest(@NotEmpty List<String> urls) {
+	}
+
 	private static ProductResponse toResponse(Product product) {
 		return new ProductResponse(
 				product.getId(),
@@ -83,6 +94,7 @@ public class ProductController {
 				product.getDiscountAvailable(),
 				product.getCurrentOrder(),
 				product.getPicture(),
+				product.getProductGallery(),
 				product.getRanking(),
 				product.getNote(),
 				product.getCreatedAt()

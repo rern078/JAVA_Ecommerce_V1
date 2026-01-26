@@ -30,6 +30,7 @@ public record UpdateProductRequest(
 		Boolean discountAvailable,
 		Boolean currentOrder,
 		String picture,
+		String productGallery,
 		Integer ranking,
 		String note
 ) {

@@ -19,7 +19,7 @@ public class AuthController {
 	@GetMapping("/login")
 	public String login(HttpSession session) {
 		if (session.getAttribute("userEmail") != null) {
-			return "redirect:/view";
+			return "redirect:/dashboard";
 		}
 		return "login";
 	}
@@ -34,13 +34,13 @@ public class AuthController {
 			return "login";
 		}
 		session.setAttribute("userEmail", email);
-		return "redirect:/view";
+		return "redirect:/dashboard";
 	}
 
 	@GetMapping("/register")
 	public String register(HttpSession session) {
 		if (session.getAttribute("userEmail") != null) {
-			return "redirect:/view";
+			return "redirect:/dashboard";
 		}
 		return "register";
 	}
@@ -58,7 +58,7 @@ public class AuthController {
 			return "register";
 		}
 		session.setAttribute("userEmail", email);
-		return "redirect:/view";
+		return "redirect:/dashboard";
 	}
 
 	@GetMapping("/logout")

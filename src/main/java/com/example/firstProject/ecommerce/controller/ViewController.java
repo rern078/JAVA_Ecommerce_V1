@@ -5,6 +5,7 @@ import com.example.firstProject.ecommerce.model.Order;
 import com.example.firstProject.ecommerce.model.Product;
 import com.example.firstProject.ecommerce.service.AuthService;
 import com.example.firstProject.ecommerce.service.CatalogService;
+import com.example.firstProject.ecommerce.service.CategoryService;
 import com.example.firstProject.ecommerce.service.CustomerService;
 import com.example.firstProject.ecommerce.service.OrderService;
 import java.util.List;
@@ -16,21 +17,24 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("/view")
+@RequestMapping("/dashboard")
 public class ViewController {
 	private final CatalogService catalogService;
 	private final CustomerService customerService;
 	private final OrderService orderService;
 	private final AuthService authService;
+	private final CategoryService categoryService;
 
 	public ViewController(CatalogService catalogService,
 						  CustomerService customerService,
 						  OrderService orderService,
-						  AuthService authService) {
+						  AuthService authService,
+						  CategoryService categoryService) {
 		this.catalogService = catalogService;
 		this.customerService = customerService;
 		this.orderService = orderService;
 		this.authService = authService;
+		this.categoryService = categoryService;
 	}
 
 	@GetMapping
@@ -45,6 +49,7 @@ public class ViewController {
 	public String products(Model model) {
 		List<Product> products = catalogService.listProducts();
 		model.addAttribute("products", products);
+		model.addAttribute("categories", categoryService.listCategories());
 		return "products";
 	}
 
@@ -60,5 +65,11 @@ public class ViewController {
 		List<Order> orders = orderService.listOrders(null);
 		model.addAttribute("orders", orders);
 		return "orders";
+	}
+
+	@GetMapping("/categories")
+	public String categories(Model model) {
+		model.addAttribute("categories", categoryService.listCategories());
+		return "categories";
 	}
 }

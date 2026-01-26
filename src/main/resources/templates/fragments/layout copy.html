@@ -17,16 +17,16 @@
 		<nav class="menu">
 			<a class="menu-item"
 			   th:classappend="${activePage == 'dashboard'} ? ' active' : ''"
-			   href="/view">Dashboard</a>
+			   href="/dashboard">Dashboard</a>
 			<a class="menu-item"
 			   th:classappend="${activePage == 'products'} ? ' active' : ''"
-			   href="/view/products">Catalog</a>
+			   href="/dashboard/products">Catalog</a>
 			<a class="menu-item"
 			   th:classappend="${activePage == 'customers'} ? ' active' : ''"
-			   href="/view/customers">Customers</a>
+			   href="/dashboard/customers">Customers</a>
 			<a class="menu-item"
 			   th:classappend="${activePage == 'orders'} ? ' active' : ''"
-			   href="/view/orders">Orders</a>
+			   href="/dashboard/orders">Orders</a>
 		</nav>
 		<div class="menu-section">Pages</div>
 		<nav class="menu">

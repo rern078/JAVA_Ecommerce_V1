@@ -58,7 +58,7 @@
       <ul class="menu-inner py-1">
             <!-- Dashboard -->
             <li class="menu-item" th:classappend="${activePage == 'dashboard'} ? 'active' : ''">
-                  <a href="/view" class="menu-link">
+                  <a href="/dashboard" class="menu-link">
                         <i class="menu-icon tf-icons bx bx-home-circle"></i>
                         <div data-i18n="Analytics">Dashboard</div>
                   </a>
@@ -73,18 +73,31 @@
 
                   <ul class="menu-sub">
                         <li class="menu-item" th:classappend="${activePage == 'products'} ? 'active' : ''">
-                              <a href="/view/products" class="menu-link">
+                              <a href="/dashboard/products" class="menu-link">
                                     <div data-i18n="Without menu">Products</div>
                               </a>
                         </li>
                         <li class="menu-item" th:classappend="${activePage == 'customers'} ? ' active' : ''">
-                              <a href="/view/customers" class="menu-link">
+                              <a href="/dashboard/customers" class="menu-link">
                                     <div data-i18n="Without navbar">Customers</div>
                               </a>
                         </li>
                   </ul>
             </li>
+            <li class="menu-item" th:classappend="${activePage == 'categories'} ? ' active'">
+                  <a href="javascript:void(0);" class="menu-link menu-toggle">
+                        <i class="menu-icon tf-icons bx bx-layout"></i>
+                        <div data-i18n="Layouts">Categories</div>
+                  </a>
 
+                  <ul class="menu-sub">
+                        <li class="menu-item" th:classappend="${activePage == 'categories'} ? 'active' : ''">
+                              <a href="/dashboard/categories" class="menu-link">
+                                    <div data-i18n="Without menu">Categories</div>
+                              </a>
+                        </li>
+                  </ul>
+            </li>
             <li class="menu-header small text-uppercase">
                   <span class="menu-header-text">Pages</span>
             </li>
@@ -130,6 +143,11 @@
                         <li class="menu-item">
                               <a href="auth-forgot-password-basic.html" class="menu-link" target="_blank">
                                     <div data-i18n="Basic">Forgot Password</div>
+                              </a>
+                        </li>
+                        <li class="menu-item">
+                              <a href="/logout" class="menu-link" target="_blank">
+                                    <div data-i18n="Basic">Logout</div>
                               </a>
                         </li>
                   </ul>

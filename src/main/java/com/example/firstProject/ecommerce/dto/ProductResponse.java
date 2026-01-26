@@ -28,6 +28,7 @@ public record ProductResponse(
 		Boolean discountAvailable,
 		Boolean currentOrder,
 		String picture,
+		String productGallery,
 		Integer ranking,
 		String note,
 		LocalDateTime createdAt
