@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	th:replace="fragments/layout :: layout('Notifications', ~{::section}, 'notifications')">
+<section>
+	<div class="container-xxl flex-grow-1 container-p-y">
+		<h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Notifications /</span> Notifications List
+		</h4>
+		<div class="card">
+			<h5 class="card-header">Notifications</h5>
+			<div class="table-responsive text-nowrap">
+				<table class="table">
+					<thead>
+						<tr>
+							<th>ID</th>
+							<th>Account</th>
+							<th>Title</th>
+							<th>Content</th>
+							<th>Seen</th>
+							<th>Created At</th>
+							<th>Receive Time</th>
+							<th>Expiry Date</th>
+						</tr>
+					</thead>
+					<tbody class="table-border-bottom-0">
+						<tr th:each="notification : ${notifications}">
+							<td th:text="${notification.id}"></td>
+							<td
+								th:text="${notification.account != null ? notification.account.email : '-'}">
+							</td>
+							<td th:text="${notification.title}"></td>
+							<td th:text="${notification.content}"></td>
+							<td th:text="${notification.seen}"></td>
+							<td th:text="${notification.createdAt}"></td>
+							<td th:text="${notification.receiveTime}"></td>
+							<td th:text="${notification.notificationExpiryDate}"></td>
+						</tr>
+						<tr th:if="${#lists.isEmpty(notifications)}">
+							<td colspan="8">No notifications found.</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+		<hr class="my-5" />
+	</div>
+
+	<script>
+		dataTables(".table", { pageLength: 10 });
+	</script>
+</section>
+
+</html>

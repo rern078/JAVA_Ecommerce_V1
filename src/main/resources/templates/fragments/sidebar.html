@@ -98,6 +98,47 @@
                         </li>
                   </ul>
             </li>
+            <li class="menu-item" th:classappend="${activePage == 'models'} ? ' active'">
+                  <a href="/dashboard/models" class="menu-link">
+                        <i class="menu-icon tf-icons bx bx-grid"></i>
+                        <div data-i18n="Layouts">Models</div>
+                  </a>
+            </li>
+            <li class="menu-item"
+                  th:classappend="${activePage == 'orders' or activePage == 'order-items' or activePage == 'order-statuses' or activePage == 'payments' or activePage == 'notifications'} ? ' active'">
+                  <a href="javascript:void(0);" class="menu-link menu-toggle">
+                        <i class="menu-icon tf-icons bx bx-cart"></i>
+                        <div data-i18n="Layouts">Orders</div>
+                  </a>
+
+                  <ul class="menu-sub">
+                        <li class="menu-item" th:classappend="${activePage == 'orders'} ? 'active' : ''">
+                              <a href="/dashboard/orders" class="menu-link">
+                                    <div data-i18n="Without menu">Orders</div>
+                              </a>
+                        </li>
+                        <li class="menu-item" th:classappend="${activePage == 'order-items'} ? 'active' : ''">
+                              <a href="/dashboard/order-items" class="menu-link">
+                                    <div data-i18n="Without menu">Order Items</div>
+                              </a>
+                        </li>
+                        <li class="menu-item" th:classappend="${activePage == 'order-statuses'} ? 'active' : ''">
+                              <a href="/dashboard/order-statuses" class="menu-link">
+                                    <div data-i18n="Without menu">Order Statuses</div>
+                              </a>
+                        </li>
+                        <li class="menu-item" th:classappend="${activePage == 'payments'} ? 'active' : ''">
+                              <a href="/dashboard/payments" class="menu-link">
+                                    <div data-i18n="Without menu">Payments</div>
+                              </a>
+                        </li>
+                        <li class="menu-item" th:classappend="${activePage == 'notifications'} ? 'active' : ''">
+                              <a href="/dashboard/notifications" class="menu-link">
+                                    <div data-i18n="Without menu">Notifications</div>
+                              </a>
+                        </li>
+                  </ul>
+            </li>
             <li class="menu-header small text-uppercase">
                   <span class="menu-header-text">Pages</span>
             </li>

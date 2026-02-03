@@ -1,44 +1,65 @@
-INSERT INTO products (id, product_name, product_description, unit_price, units_in_stock, created_at) VALUES
-  (1, 'Wireless Mouse', 'Ergonomic wireless mouse', 19.99, 120, TIMESTAMP '2026-01-22 09:00:00'),
-  (2, 'Mechanical Keyboard', 'RGB mechanical keyboard', 79.50, 60, TIMESTAMP '2026-01-22 09:05:00'),
-  (3, 'USB-C Hub', '6-in-1 USB-C hub', 34.99, 85, TIMESTAMP '2026-01-22 09:10:00'),
-  (4, 'Noise Cancelling Headphones', 'Over-ear ANC headphones', 129.00, 40, TIMESTAMP '2026-01-22 09:15:00'),
-  (5, 'Webcam 1080p', 'Full HD webcam', 49.00, 70, TIMESTAMP '2026-01-22 09:20:00')
-ON CONFLICT (id) DO NOTHING;
+INSERT INTO categories (category_name, description, active)
+VALUES
+	('Electronics', 'Devices, gadgets, and consumer electronics.', true),
+	('Computers', 'Laptops, desktops, and computing accessories.', true),
+	('Mobile Phones', 'Smartphones and feature phones.', true),
+	('Accessories', 'Cables, chargers, cases, and add-ons.', true),
+	('Home Appliances', 'Appliances for everyday home use.', true),
+	('Kitchen', 'Cookware, tools, and kitchen essentials.', true),
+	('Furniture', 'Chairs, tables, and home furnishings.', true),
+	('Lighting', 'Indoor and outdoor lighting solutions.', true),
+	('Office Supplies', 'Stationery and office essentials.', true),
+	('Sports', 'Sports equipment and fitness gear.', true),
+	('Outdoors', 'Camping and outdoor adventure items.', true),
+	('Fashion Men', 'Menswear and accessories.', true),
+	('Fashion Women', 'Womenswear and accessories.', true),
+	('Kids', 'Kids apparel and essentials.', true),
+	('Beauty', 'Skincare, makeup, and beauty tools.', true),
+	('Health', 'Health and personal care products.', true),
+	('Books', 'Fiction, non-fiction, and learning materials.', true),
+	('Toys', 'Toys, games, and hobbies.', true),
+	('Automotive', 'Car care and auto accessories.', true),
+	('Grocery', 'Pantry staples and daily groceries.', true);
 
-INSERT INTO categories (id, category_name, description, active, picture) VALUES
-  (1, 'Accessories', 'Device accessories and peripherals', true, '/images/categories/accessories.jpg'),
-  (2, 'Audio', 'Headphones, speakers, and audio gear', true, '/images/categories/audio.jpg'),
-  (3, 'Video', 'Webcams and video equipment', true, '/images/categories/video.jpg'),
-  (4, 'Computers', 'Laptops, desktops, and computing essentials', true, '/images/categories/computers.jpg'),
-  (5, 'Mobile', 'Smartphones, tablets, and mobile accessories', true, '/images/categories/mobile.jpg'),
-  (6, 'Gaming', 'Consoles, controllers, and gaming gear', true, '/images/categories/gaming.jpg'),
-  (7, 'Networking', 'Routers, switches, and connectivity', true, '/images/categories/networking.jpg'),
-  (8, 'Storage', 'Drives, SSDs, and storage solutions', true, '/images/categories/storage.jpg'),
-  (9, 'Smart Home', 'Home automation and smart devices', true, '/images/categories/smart-home.jpg'),
-  (10, 'Office', 'Office equipment and productivity tools', true, '/images/categories/office.jpg')
-ON CONFLICT (id) DO NOTHING;
-
-INSERT INTO customers (id, first_name, email, address, created_at) VALUES
-  (1, 'Lina Park', 'lina.park@example.com', '12 Lotus St, Bangkok', TIMESTAMP '2026-01-22 09:30:00'),
-  (2, 'Arun Nair', 'arun.nair@example.com', '8 Orchid Rd, Chiang Mai', TIMESTAMP '2026-01-22 09:31:00'),
-  (3, 'Maya Chen', 'maya.chen@example.com', '55 River Ave, Hanoi', TIMESTAMP '2026-01-22 09:32:00'),
-  (4, 'Somchai K.', 'somchai.k@example.com', '21 Bamboo Ln, Phuket', TIMESTAMP '2026-01-22 09:33:00'),
-  (5, 'Nadia Ali', 'nadia.ali@example.com', '99 Palm Dr, Jakarta', TIMESTAMP '2026-01-22 09:34:00')
-ON CONFLICT (id) DO NOTHING;
-
-INSERT INTO orders (id, customer_id, status, total, created_at) VALUES
-  (1, 1, 'NEW', 19.99, TIMESTAMP '2026-01-22 10:00:00'),
-  (2, 2, 'PAID', 79.50, TIMESTAMP '2026-01-22 10:05:00'),
-  (3, 3, 'SHIPPED', 34.99, TIMESTAMP '2026-01-22 10:10:00'),
-  (4, 4, 'NEW', 129.00, TIMESTAMP '2026-01-22 10:15:00'),
-  (5, 5, 'CANCELLED', 49.00, TIMESTAMP '2026-01-22 10:20:00')
-ON CONFLICT (id) DO NOTHING;
-
-INSERT INTO order_items (id, order_id, product_id, quantity, price, total) VALUES
-  (1, 1, 1, 1, 19.99, 19.99),
-  (2, 2, 2, 1, 79.50, 79.50),
-  (3, 3, 3, 1, 34.99, 34.99),
-  (4, 4, 4, 1, 129.00, 129.00),
-  (5, 5, 5, 1, 49.00, 49.00)
-ON CONFLICT (id) DO NOTHING;
+INSERT INTO products (product_name, product_description, unit_price, units_in_stock, category_id, sku, created_at)
+VALUES
+	('Bluetooth Speaker', 'Portable speaker with rich bass and 10-hour battery life.', 49.99, 120,
+		(SELECT id FROM categories WHERE category_name = 'Electronics'), 'ELEC-BTS-001', CURRENT_TIMESTAMP),
+	('Noise-Canceling Headphones', 'Over-ear headphones with active noise cancellation.', 129.99, 60,
+		(SELECT id FROM categories WHERE category_name = 'Electronics'), 'ELEC-NCH-002', CURRENT_TIMESTAMP),
+	('Ultrabook Laptop', 'Lightweight 14-inch laptop for work and study.', 899.00, 25,
+		(SELECT id FROM categories WHERE category_name = 'Computers'), 'COMP-ULT-003', CURRENT_TIMESTAMP),
+	('Mechanical Keyboard', 'Tactile mechanical keyboard with RGB backlight.', 79.50, 85,
+		(SELECT id FROM categories WHERE category_name = 'Computers'), 'COMP-MKB-004', CURRENT_TIMESTAMP),
+	('Smartphone Pro X', '6.5-inch smartphone with triple-camera system.', 699.00, 40,
+		(SELECT id FROM categories WHERE category_name = 'Mobile Phones'), 'MOB-PROX-005', CURRENT_TIMESTAMP),
+	('Wireless Charger Pad', 'Fast charging pad compatible with most phones.', 24.99, 150,
+		(SELECT id FROM categories WHERE category_name = 'Accessories'), 'ACC-WCP-006', CURRENT_TIMESTAMP),
+	('Air Fryer 5L', 'Oil-free fryer with temperature control.', 89.99, 55,
+		(SELECT id FROM categories WHERE category_name = 'Home Appliances'), 'HOME-AFR-007', CURRENT_TIMESTAMP),
+	('Blender 700W', 'High-power blender for smoothies and sauces.', 59.00, 70,
+		(SELECT id FROM categories WHERE category_name = 'Kitchen'), 'KITCH-BLD-008', CURRENT_TIMESTAMP),
+	('Ergonomic Office Chair', 'Adjustable chair with lumbar support.', 159.00, 30,
+		(SELECT id FROM categories WHERE category_name = 'Furniture'), 'FURN-EOC-009', CURRENT_TIMESTAMP),
+	('LED Desk Lamp', 'Dimmable lamp with USB charging port.', 29.99, 95,
+		(SELECT id FROM categories WHERE category_name = 'Lighting'), 'LGT-DSL-010', CURRENT_TIMESTAMP),
+	('Notebook Set', 'Pack of 3 ruled notebooks for school or office.', 12.49, 200,
+		(SELECT id FROM categories WHERE category_name = 'Office Supplies'), 'OFF-NBS-011', CURRENT_TIMESTAMP),
+	('Yoga Mat', 'Non-slip mat for yoga and fitness training.', 21.99, 110,
+		(SELECT id FROM categories WHERE category_name = 'Sports'), 'SPRT-YMT-012', CURRENT_TIMESTAMP),
+	('Camping Tent 4P', 'Weather-resistant 4-person tent.', 139.00, 20,
+		(SELECT id FROM categories WHERE category_name = 'Outdoors'), 'OUT-TNT-013', CURRENT_TIMESTAMP),
+	('Mens Casual Jacket', 'Lightweight jacket for everyday wear.', 64.50, 45,
+		(SELECT id FROM categories WHERE category_name = 'Fashion Men'), 'MEN-JKT-014', CURRENT_TIMESTAMP),
+	('Womens Knit Sweater', 'Soft knit sweater with relaxed fit.', 52.00, 50,
+		(SELECT id FROM categories WHERE category_name = 'Fashion Women'), 'WMN-SWT-015', CURRENT_TIMESTAMP),
+	('Kids Building Blocks', 'Creative block set for ages 4+.', 34.99, 75,
+		(SELECT id FROM categories WHERE category_name = 'Toys'), 'TOY-BLK-016', CURRENT_TIMESTAMP),
+	('Hydrating Face Cream', 'Daily moisturizer for all skin types.', 18.75, 90,
+		(SELECT id FROM categories WHERE category_name = 'Beauty'), 'BEAU-FCR-017', CURRENT_TIMESTAMP),
+	('Vitamin C Tablets', 'Immune support supplement, 60 count.', 14.25, 140,
+		(SELECT id FROM categories WHERE category_name = 'Health'), 'HLTH-VIT-018', CURRENT_TIMESTAMP),
+	('Classic Novel Set', 'Collection of 5 timeless classics.', 39.99, 35,
+		(SELECT id FROM categories WHERE category_name = 'Books'), 'BOOK-CNS-019', CURRENT_TIMESTAMP),
+	('Car Phone Mount', 'Dashboard mount with adjustable grip.', 16.99, 125,
+		(SELECT id FROM categories WHERE category_name = 'Automotive'), 'AUTO-CPM-020', CURRENT_TIMESTAMP);

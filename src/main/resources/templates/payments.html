@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	th:replace="fragments/layout :: layout('Payments', ~{::section}, 'payments')">
+<section>
+	<div class="container-xxl flex-grow-1 container-p-y">
+		<h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Payments /</span> Payment Methods</h4>
+		<div class="card">
+			<h5 class="card-header">Payment Methods</h5>
+			<div class="table-responsive text-nowrap">
+				<table class="table">
+					<thead>
+						<tr>
+							<th>ID</th>
+							<th>Payment Type</th>
+							<th>Allowed</th>
+						</tr>
+					</thead>
+					<tbody class="table-border-bottom-0">
+						<tr th:each="payment : ${payments}">
+							<td th:text="${payment.id}"></td>
+							<td th:text="${payment.paymentType}"></td>
+							<td th:text="${payment.allowed}"></td>
+						</tr>
+						<tr th:if="${#lists.isEmpty(payments)}">
+							<td colspan="3">No payment methods found.</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+		<hr class="my-5" />
+	</div>
+
+	<script>
+		dataTables(".table", { pageLength: 10 });
+	</script>
+</section>
+
+</html>

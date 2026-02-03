@@ -1,33 +1,510 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
-      th:replace="fragments/layout :: layout('Customers', ~{::section}, 'customers')">
+	th:replace="fragments/layout :: layout('Customers', ~{::section}, 'customers')">
 <section>
-	<div class="page-actions">
-		<a class="link" href="/dashboard">Back to dashboard</a>
+	<div class="container-xxl flex-grow-1 container-p-y">
+		<h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Customers /</span> Customer Form</h4>
+		<div class="row">
+			<div class="col-xl">
+				<div class="card mb-4">
+					<div class="card-header d-flex justify-content-between align-items-center">
+						<h5 class="mb-0">Customer Form</h5>
+						<small class="text-muted float-end">Customer Form</small>
+					</div>
+					<div class="card-body">
+						<form id="customer-form">
+							<div class="row g-3">
+								<div class="mb-3 col-md-4">
+									<label class="form-label" for="customer-name">Name</label>
+									<input class="form-control" id="customer-name"
+										placeholder="Customer name" required />
+								</div>
+								<div class="mb-3 col-md-4">
+									<label class="form-label" for="customer-last-name">Last
+										Name</label>
+									<input class="form-control" id="customer-last-name"
+										placeholder="Last name" />
+								</div>
+								<div class="mb-3 col-md-4">
+									<label class="form-label" for="customer-email">Email</label>
+									<input class="form-control" id="customer-email" type="email"
+										placeholder="name@example.com" required />
+								</div>
+								<div class="mb-3 col-md-4">
+									<label class="form-label" for="customer-phone">Phone</label>
+									<input class="form-control" id="customer-phone"
+										placeholder="Phone" />
+								</div>
+								<div class="mb-3 col-md-4">
+									<label class="form-label" for="customer-class">Customer
+										Class</label>
+									<input class="form-control" id="customer-class"
+										placeholder="Class" />
+								</div>
+								<div class="mb-3 col-md-4">
+									<label class="form-label" for="customer-voice-mail">Voice
+										Mail</label>
+									<input class="form-control" id="customer-voice-mail"
+										placeholder="Voice mail" />
+								</div>
+								<div class="mb-3 col-md-4">
+									<label class="form-label" for="customer-room">Room</label>
+									<input class="form-control" id="customer-room"
+										placeholder="Room" />
+								</div>
+								<div class="mb-3 col-md-4">
+									<label class="form-label" for="customer-building">Building</label>
+									<input class="form-control" id="customer-building"
+										placeholder="Building" />
+								</div>
+								<div class="mb-3 col-md-6">
+									<label class="form-label" for="customer-address">Address</label>
+									<input class="form-control" id="customer-address"
+										placeholder="Address" />
+								</div>
+								<div class="mb-3 col-md-6">
+									<label class="form-label" for="customer-address1">Address
+										1</label>
+									<input class="form-control" id="customer-address1"
+										placeholder="Address line 1" />
+								</div>
+								<div class="mb-3 col-md-6">
+									<label class="form-label" for="customer-address2">Address
+										2</label>
+									<input class="form-control" id="customer-address2"
+										placeholder="Address line 2" />
+								</div>
+								<div class="mb-3 col-md-3">
+									<label class="form-label" for="customer-city">City</label>
+									<input class="form-control" id="customer-city"
+										placeholder="City" />
+								</div>
+								<div class="mb-3 col-md-3">
+									<label class="form-label" for="customer-state">State</label>
+									<input class="form-control" id="customer-state"
+										placeholder="State" />
+								</div>
+								<div class="mb-3 col-md-3">
+									<label class="form-label" for="customer-postal-code">Postal
+										Code</label>
+									<input class="form-control" id="customer-postal-code"
+										placeholder="Postal code" />
+								</div>
+								<div class="mb-3 col-md-3">
+									<label class="form-label" for="customer-country">Country</label>
+									<input class="form-control" id="customer-country"
+										placeholder="Country" />
+								</div>
+								<div class="col-12">
+									<h6 class="mb-0">Billing</h6>
+								</div>
+								<div class="mb-3 col-md-6">
+									<label class="form-label" for="customer-billing-address">Billing
+										Address</label>
+									<input class="form-control" id="customer-billing-address"
+										placeholder="Billing address" />
+								</div>
+								<div class="mb-3 col-md-3">
+									<label class="form-label" for="customer-billing-city">Billing
+										City</label>
+									<input class="form-control" id="customer-billing-city"
+										placeholder="Billing city" />
+								</div>
+								<div class="mb-3 col-md-3">
+									<label class="form-label" for="customer-billing-region">Billing
+										Region</label>
+									<input class="form-control" id="customer-billing-region"
+										placeholder="Billing region" />
+								</div>
+								<div class="mb-3 col-md-3">
+									<label class="form-label"
+										for="customer-billing-postal-code">Billing Postal
+										Code</label>
+									<input class="form-control" id="customer-billing-postal-code"
+										placeholder="Billing postal code" />
+								</div>
+								<div class="mb-3 col-md-3">
+									<label class="form-label" for="customer-billing-country">Billing
+										Country</label>
+									<input class="form-control" id="customer-billing-country"
+										placeholder="Billing country" />
+								</div>
+								<div class="col-12">
+									<h6 class="mb-0">Shipping</h6>
+								</div>
+								<div class="mb-3 col-md-6">
+									<label class="form-label" for="customer-ship-address">Ship
+										Address</label>
+									<input class="form-control" id="customer-ship-address"
+										placeholder="Ship address" />
+								</div>
+								<div class="mb-3 col-md-3">
+									<label class="form-label" for="customer-ship-city">Ship
+										City</label>
+									<input class="form-control" id="customer-ship-city"
+										placeholder="Ship city" />
+								</div>
+								<div class="mb-3 col-md-3">
+									<label class="form-label" for="customer-ship-region">Ship
+										Region</label>
+									<input class="form-control" id="customer-ship-region"
+										placeholder="Ship region" />
+								</div>
+								<div class="mb-3 col-md-3">
+									<label class="form-label" for="customer-ship-postal-code">Ship
+										Postal Code</label>
+									<input class="form-control" id="customer-ship-postal-code"
+										placeholder="Ship postal code" />
+								</div>
+								<div class="mb-3 col-md-3">
+									<label class="form-label" for="customer-ship-country">Ship
+										Country</label>
+									<input class="form-control" id="customer-ship-country"
+										placeholder="Ship country" />
+								</div>
+								<div class="col-12">
+									<h6 class="mb-0">Payment</h6>
+								</div>
+								<div class="mb-3 col-md-4">
+									<label class="form-label" for="customer-credit-card">Credit
+										Card</label>
+									<input class="form-control" id="customer-credit-card"
+										placeholder="Credit card" />
+								</div>
+								<div class="mb-3 col-md-4">
+									<label class="form-label" for="customer-credit-card-type-id">Card
+										Type ID</label>
+									<input class="form-control" id="customer-credit-card-type-id"
+										placeholder="Card type ID" />
+								</div>
+								<div class="mb-3 col-md-2">
+									<label class="form-label" for="customer-card-exp-mo">Exp
+										Month</label>
+									<input class="form-control" id="customer-card-exp-mo"
+										placeholder="MM" />
+								</div>
+								<div class="mb-3 col-md-2">
+									<label class="form-label" for="customer-card-exp-yr">Exp
+										Year</label>
+									<input class="form-control" id="customer-card-exp-yr"
+										placeholder="YY" />
+								</div>
+								<div class="mb-3 col-md-4">
+									<label class="form-label" for="customer-password">Password</label>
+									<input class="form-control" id="customer-password" type="password"
+										placeholder="Password" />
+								</div>
+								<div class="col-12 d-flex gap-2">
+									<button class="btn btn-primary" type="submit"
+										id="customer-submit">Add
+										Customer</button>
+									<button class="btn btn-outline-secondary" type="button"
+										id="customer-reset">Clear</button>
+								</div>
+								<div class="col-12">
+									<small class="text-danger" id="customer-error"
+										style="display:none;"></small>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="card">
+			<h5 class="card-header">Customers List</h5>
+			<div class="table-responsive text-nowrap">
+				<table class="table">
+					<thead>
+						<tr>
+							<th>ID</th>
+							<th>Name</th>
+							<th>Last Name</th>
+							<th>Email</th>
+							<th>Phone</th>
+							<th>Class</th>
+							<th>Voice Mail</th>
+							<th>Room</th>
+							<th>Building</th>
+							<th>Address</th>
+							<th>Address 1</th>
+							<th>Address 2</th>
+							<th>City</th>
+							<th>State</th>
+							<th>Postal Code</th>
+							<th>Country</th>
+							<th>Billing Address</th>
+							<th>Billing City</th>
+							<th>Billing Region</th>
+							<th>Billing Postal</th>
+							<th>Billing Country</th>
+							<th>Ship Address</th>
+							<th>Ship City</th>
+							<th>Ship Region</th>
+							<th>Ship Postal</th>
+							<th>Ship Country</th>
+							<th>Credit Card</th>
+							<th>Card Type</th>
+							<th>Exp Mo</th>
+							<th>Exp Yr</th>
+							<th>Created</th>
+						</tr>
+					</thead>
+					<tbody class="table-border-bottom-0" id="customer-table-body">
+						<tr th:each="customer : ${customers}">
+							<td th:text="${customer.id}"></td>
+							<td th:text="${customer.name}"></td>
+							<td th:text="${customer.lastName}"></td>
+							<td th:text="${customer.email}"></td>
+							<td th:text="${customer.phone}"></td>
+							<td th:text="${customer.customerClass}"></td>
+							<td th:text="${customer.voiceMail}"></td>
+							<td th:text="${customer.room}"></td>
+							<td th:text="${customer.building}"></td>
+							<td th:text="${customer.address}"></td>
+							<td th:text="${customer.address1}"></td>
+							<td th:text="${customer.address2}"></td>
+							<td th:text="${customer.city}"></td>
+							<td th:text="${customer.state}"></td>
+							<td th:text="${customer.postalCode}"></td>
+							<td th:text="${customer.country}"></td>
+							<td th:text="${customer.billingAddress}"></td>
+							<td th:text="${customer.billingCity}"></td>
+							<td th:text="${customer.billingRegion}"></td>
+							<td th:text="${customer.billingPostalCode}"></td>
+							<td th:text="${customer.billingCountry}"></td>
+							<td th:text="${customer.shipAddress}"></td>
+							<td th:text="${customer.shipCity}"></td>
+							<td th:text="${customer.shipRegion}"></td>
+							<td th:text="${customer.shipPostalCode}"></td>
+							<td th:text="${customer.shipCountry}"></td>
+							<td th:text="${customer.creditCard}"></td>
+							<td th:text="${customer.creditCardTypeId}"></td>
+							<td th:text="${customer.cardExpMo}"></td>
+							<td th:text="${customer.cardExpYr}"></td>
+							<td th:text="${customer.createdAt}"></td>
+						</tr>
+						<tr th:if="${#lists.isEmpty(customers)}" id="customer-empty">
+							<td colspan="31">No customers found.</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+		<hr class="my-5" />
 	</div>
-	<div class="panel">
-		<div class="panel-title">Customers</div>
-		<table class="data-table">
-			<thead>
-			<tr>
-				<th>ID</th>
-				<th>Name</th>
-				<th>Email</th>
-				<th>Address</th>
-			</tr>
-			</thead>
-			<tbody>
-			<tr th:each="customer : ${customers}">
-				<td th:text="${customer.id}">1</td>
-				<td th:text="${customer.name}">Name</td>
-				<td th:text="${customer.email}">email@example.com</td>
-				<td th:text="${customer.address}">Address</td>
-			</tr>
-			<tr th:if="${#lists.isEmpty(customers)}">
-				<td colspan="4">No customers found.</td>
-			</tr>
-			</tbody>
-		</table>
-	</div>
+
+	<script>
+		(() => {
+			const form = document.getElementById("customer-form");
+			const nameInput = document.getElementById("customer-name");
+			const lastNameInput = document.getElementById("customer-last-name");
+			const emailInput = document.getElementById("customer-email");
+			const phoneInput = document.getElementById("customer-phone");
+			const classInput = document.getElementById("customer-class");
+			const voiceMailInput = document.getElementById("customer-voice-mail");
+			const roomInput = document.getElementById("customer-room");
+			const buildingInput = document.getElementById("customer-building");
+			const addressInput = document.getElementById("customer-address");
+			const address1Input = document.getElementById("customer-address1");
+			const address2Input = document.getElementById("customer-address2");
+			const cityInput = document.getElementById("customer-city");
+			const stateInput = document.getElementById("customer-state");
+			const postalCodeInput = document.getElementById("customer-postal-code");
+			const countryInput = document.getElementById("customer-country");
+			const billingAddressInput = document.getElementById("customer-billing-address");
+			const billingCityInput = document.getElementById("customer-billing-city");
+			const billingRegionInput = document.getElementById("customer-billing-region");
+			const billingPostalCodeInput = document.getElementById("customer-billing-postal-code");
+			const billingCountryInput = document.getElementById("customer-billing-country");
+			const shipAddressInput = document.getElementById("customer-ship-address");
+			const shipCityInput = document.getElementById("customer-ship-city");
+			const shipRegionInput = document.getElementById("customer-ship-region");
+			const shipPostalCodeInput = document.getElementById("customer-ship-postal-code");
+			const shipCountryInput = document.getElementById("customer-ship-country");
+			const creditCardInput = document.getElementById("customer-credit-card");
+			const creditCardTypeIdInput = document.getElementById("customer-credit-card-type-id");
+			const cardExpMoInput = document.getElementById("customer-card-exp-mo");
+			const cardExpYrInput = document.getElementById("customer-card-exp-yr");
+			const passwordInput = document.getElementById("customer-password");
+			const resetBtn = document.getElementById("customer-reset");
+			const submitBtn = document.getElementById("customer-submit");
+			const errorEl = document.getElementById("customer-error");
+			const tableBody = document.getElementById("customer-table-body");
+			const emptyRow = document.getElementById("customer-empty");
+
+			const clearForm = () => {
+				nameInput.value = "";
+				lastNameInput.value = "";
+				emailInput.value = "";
+				phoneInput.value = "";
+				classInput.value = "";
+				voiceMailInput.value = "";
+				roomInput.value = "";
+				buildingInput.value = "";
+				addressInput.value = "";
+				address1Input.value = "";
+				address2Input.value = "";
+				cityInput.value = "";
+				stateInput.value = "";
+				postalCodeInput.value = "";
+				countryInput.value = "";
+				billingAddressInput.value = "";
+				billingCityInput.value = "";
+				billingRegionInput.value = "";
+				billingPostalCodeInput.value = "";
+				billingCountryInput.value = "";
+				shipAddressInput.value = "";
+				shipCityInput.value = "";
+				shipRegionInput.value = "";
+				shipPostalCodeInput.value = "";
+				shipCountryInput.value = "";
+				creditCardInput.value = "";
+				creditCardTypeIdInput.value = "";
+				cardExpMoInput.value = "";
+				cardExpYrInput.value = "";
+				passwordInput.value = "";
+				errorEl.style.display = "none";
+				errorEl.textContent = "";
+			};
+
+			const showError = (message) => {
+				errorEl.textContent = message;
+				errorEl.style.display = "block";
+			};
+
+			const formatDate = (value) => {
+				if (!value) {
+					return "-";
+				}
+				const parsed = new Date(value);
+				if (Number.isNaN(parsed.getTime())) {
+					return value;
+				}
+				return parsed.toLocaleString();
+			};
+
+			const displayValue = (value) => {
+				if (value === null || value === undefined || value === "") {
+					return "-";
+				}
+				return value;
+			};
+
+			const createRow = (customer) => {
+				const row = document.createElement("tr");
+				row.innerHTML = `
+					<td>${displayValue(customer.id)}</td>
+					<td>${displayValue(customer.name)}</td>
+					<td>${displayValue(customer.lastName)}</td>
+					<td>${displayValue(customer.email)}</td>
+					<td>${displayValue(customer.phone)}</td>
+					<td>${displayValue(customer.customerClass)}</td>
+					<td>${displayValue(customer.voiceMail)}</td>
+					<td>${displayValue(customer.room)}</td>
+					<td>${displayValue(customer.building)}</td>
+					<td>${displayValue(customer.address)}</td>
+					<td>${displayValue(customer.address1)}</td>
+					<td>${displayValue(customer.address2)}</td>
+					<td>${displayValue(customer.city)}</td>
+					<td>${displayValue(customer.state)}</td>
+					<td>${displayValue(customer.postalCode)}</td>
+					<td>${displayValue(customer.country)}</td>
+					<td>${displayValue(customer.billingAddress)}</td>
+					<td>${displayValue(customer.billingCity)}</td>
+					<td>${displayValue(customer.billingRegion)}</td>
+					<td>${displayValue(customer.billingPostalCode)}</td>
+					<td>${displayValue(customer.billingCountry)}</td>
+					<td>${displayValue(customer.shipAddress)}</td>
+					<td>${displayValue(customer.shipCity)}</td>
+					<td>${displayValue(customer.shipRegion)}</td>
+					<td>${displayValue(customer.shipPostalCode)}</td>
+					<td>${displayValue(customer.shipCountry)}</td>
+					<td>${displayValue(customer.creditCard)}</td>
+					<td>${displayValue(customer.creditCardTypeId)}</td>
+					<td>${displayValue(customer.cardExpMo)}</td>
+					<td>${displayValue(customer.cardExpYr)}</td>
+					<td>${formatDate(customer.createdAt)}</td>
+				`;
+				return row;
+			};
+
+			const appendCustomer = (customer) => {
+				if (!tableBody) {
+					return;
+				}
+				const row = createRow(customer);
+				tableBody.prepend(row);
+				if (emptyRow) {
+					emptyRow.style.display = "none";
+				}
+			};
+
+			resetBtn?.addEventListener("click", clearForm);
+
+			form?.addEventListener("submit", async (event) => {
+				event.preventDefault();
+				errorEl.style.display = "none";
+				submitBtn.disabled = true;
+
+				try {
+					const response = await fetch("/api/customers", {
+						method: "POST",
+						headers: {
+							"Content-Type": "application/json",
+						},
+						body: JSON.stringify({
+							name: nameInput.value.trim(),
+							lastName: lastNameInput.value.trim(),
+							email: emailInput.value.trim(),
+							phone: phoneInput.value.trim(),
+							customerClass: classInput.value.trim(),
+							voiceMail: voiceMailInput.value.trim(),
+							room: roomInput.value.trim(),
+							building: buildingInput.value.trim(),
+							address: addressInput.value.trim(),
+							address1: address1Input.value.trim(),
+							address2: address2Input.value.trim(),
+							city: cityInput.value.trim(),
+							state: stateInput.value.trim(),
+							postalCode: postalCodeInput.value.trim(),
+							country: countryInput.value.trim(),
+							billingAddress: billingAddressInput.value.trim(),
+							billingCity: billingCityInput.value.trim(),
+							billingRegion: billingRegionInput.value.trim(),
+							billingPostalCode: billingPostalCodeInput.value.trim(),
+							billingCountry: billingCountryInput.value.trim(),
+							shipAddress: shipAddressInput.value.trim(),
+							shipCity: shipCityInput.value.trim(),
+							shipRegion: shipRegionInput.value.trim(),
+							shipPostalCode: shipPostalCodeInput.value.trim(),
+							shipCountry: shipCountryInput.value.trim(),
+							creditCard: creditCardInput.value.trim(),
+							creditCardTypeId: creditCardTypeIdInput.value.trim(),
+							cardExpMo: cardExpMoInput.value.trim(),
+							cardExpYr: cardExpYrInput.value.trim(),
+							password: passwordInput.value,
+						}),
+					});
+
+					const text = await response.text();
+					const data = text ? JSON.parse(text) : null;
+
+					if (!response.ok) {
+						showError(data?.message || "Failed to create customer.");
+						return;
+					}
+
+					appendCustomer(data);
+					clearForm();
+				} catch (error) {
+					showError(error.message || "Failed to create customer.");
+				} finally {
+					submitBtn.disabled = false;
+				}
+			});
+		})();
+	</script>
 </section>
+
 </html>

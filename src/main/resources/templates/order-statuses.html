@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	th:replace="fragments/layout :: layout('Order Statuses', ~{::section}, 'order-statuses')">
+<section>
+	<div class="container-xxl flex-grow-1 container-p-y">
+		<h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Orders /</span> Order Statuses</h4>
+		<div class="card">
+			<h5 class="card-header">Order Statuses</h5>
+			<div class="table-responsive text-nowrap">
+				<table class="table">
+					<thead>
+						<tr>
+							<th>ID</th>
+							<th>Status Name</th>
+							<th>Color</th>
+							<th>Privacy</th>
+							<th>Created At</th>
+							<th>Updated At</th>
+							<th>Created By</th>
+							<th>Updated By</th>
+						</tr>
+					</thead>
+					<tbody class="table-border-bottom-0">
+						<tr th:each="status : ${orderStatuses}">
+							<td th:text="${status.id}"></td>
+							<td th:text="${status.statusName}"></td>
+							<td th:text="${status.color}"></td>
+							<td th:text="${status.privacy}"></td>
+							<td th:text="${status.createdAt}"></td>
+							<td th:text="${status.updatedAt}"></td>
+							<td th:text="${status.createdBy}"></td>
+							<td th:text="${status.updatedBy}"></td>
+						</tr>
+						<tr th:if="${#lists.isEmpty(orderStatuses)}">
+							<td colspan="8">No order statuses found.</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+		<hr class="my-5" />
+	</div>
+
+	<script>
+		dataTables(".table", { pageLength: 10 });
+	</script>
+</section>
+
+</html>
