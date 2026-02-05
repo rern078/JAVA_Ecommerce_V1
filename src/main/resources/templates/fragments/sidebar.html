@@ -104,6 +104,12 @@
                         <div data-i18n="Layouts">Models</div>
                   </a>
             </li>
+            <li class="menu-item" th:classappend="${activePage == 'users'} ? ' active'">
+                  <a href="/dashboard/users" class="menu-link">
+                        <i class="menu-icon tf-icons bx bx-user"></i>
+                        <div data-i18n="Layouts">Users</div>
+                  </a>
+            </li>
             <li class="menu-item"
                   th:classappend="${activePage == 'orders' or activePage == 'order-items' or activePage == 'order-statuses' or activePage == 'payments' or activePage == 'notifications'} ? ' active'">
                   <a href="javascript:void(0);" class="menu-link menu-toggle">

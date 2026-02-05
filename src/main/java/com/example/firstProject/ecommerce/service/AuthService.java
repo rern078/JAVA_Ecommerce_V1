@@ -2,6 +2,7 @@ package com.example.firstProject.ecommerce.service;
 
 import com.example.firstProject.ecommerce.exception.BadRequestException;
 import com.example.firstProject.ecommerce.model.AppUser;
+import com.example.firstProject.ecommerce.model.UserRole;
 import com.example.firstProject.ecommerce.repository.UserRepository;
 import java.util.Optional;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -32,7 +33,7 @@ public class AuthService {
 			throw new BadRequestException("Email already registered.");
 		}
 		String hash = passwordEncoder.encode(password);
-		userRepository.save(new AppUser(name, normalizedEmail, hash));
+		userRepository.save(new AppUser(name, normalizedEmail, hash, UserRole.USER));
 	}
 
 	public boolean authenticate(String email, String password) {
@@ -49,5 +50,12 @@ public class AuthService {
 			return Optional.empty();
 		}
 		return userRepository.findByEmail(email.toLowerCase()).map(AppUser::getName);
+	}
+
+	public Optional<UserRole> getUserRole(String email) {
+		if (email == null) {
+			return Optional.empty();
+		}
+		return userRepository.findByEmail(email.toLowerCase()).map(AppUser::getRole);
 	}
 }

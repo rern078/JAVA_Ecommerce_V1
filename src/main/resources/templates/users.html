@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	th:replace="fragments/layout :: layout('Users', ~{::section}, 'users')">
+<section>
+	<div class="container-xxl flex-grow-1 container-p-y">
+		<h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Users /</span> User Form</h4>
+		<div class="row">
+			<div class="col-xl">
+				<div class="card mb-4">
+					<div class="card-header d-flex justify-content-between align-items-center">
+						<h5 class="mb-0">User Form</h5>
+						<small class="text-muted float-end">User Form</small>
+					</div>
+					<div class="card-body">
+						<form id="user-form">
+							<input type="hidden" id="user-id" />
+							<div class="row g-3">
+								<div class="mb-3 col-md-4">
+									<label class="form-label" for="user-name">Name</label>
+									<input class="form-control" id="user-name" placeholder="Full name"
+										required />
+								</div>
+								<div class="mb-3 col-md-4">
+									<label class="form-label" for="user-email">Email</label>
+									<input class="form-control" id="user-email" type="email"
+										placeholder="name@example.com" required />
+								</div>
+								<div class="mb-3 col-md-4">
+									<label class="form-label" for="user-password">Password</label>
+									<input class="form-control" id="user-password" type="password"
+										placeholder="Password" />
+									<small class="text-muted">Leave blank to keep current
+										password.</small>
+								</div>
+								<div class="mb-3 col-md-4">
+									<label class="form-label" for="user-role">Role</label>
+									<select class="form-select" id="user-role" required>
+										<option value="ADMIN">Admin</option>
+										<option value="USER" selected>User</option>
+										<option value="CUSTOMER">Customer</option>
+										<option value="STAFF">Staff</option>
+									</select>
+								</div>
+								<div class="col-12 d-flex gap-2">
+									<button class="btn btn-primary" type="submit" id="user-submit">Add
+										User</button>
+									<button class="btn btn-outline-secondary" type="button"
+										id="user-reset">Clear</button>
+								</div>
+								<div class="col-12">
+									<small class="text-danger" id="user-error"
+										style="display:none;"></small>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="card">
+			<h5 class="card-header">Users List</h5>
+			<div class="table-responsive text-nowrap">
+				<table class="table">
+					<thead>
+						<tr>
+							<th>ID</th>
+							<th>Name</th>
+							<th>Email</th>
+							<th>Role</th>
+							<th>Created</th>
+							<th>Actions</th>
+						</tr>
+					</thead>
+					<tbody class="table-border-bottom-0">
+						<tr th:each="user : ${users}" th:attr="data-id=${user.id},
+								data-name=${user.name},
+								data-email=${user.email},
+								data-role=${user.role}">
+							<td th:text="${user.id}"></td>
+							<td th:text="${user.name}"></td>
+							<td th:text="${user.email}"></td>
+							<td th:text="${user.role}"></td>
+							<td th:text="${user.createdAt}"></td>
+							<td>
+								<div class="dropdown">
+									<button type="button" class="btn p-0 dropdown-toggle hide-arrow"
+										data-bs-toggle="dropdown">
+										<i class="bx bx-dots-vertical-rounded"></i>
+									</button>
+									<div class="dropdown-menu">
+										<button class="dropdown-item btn-edit" type="button"><i
+												class="bx bx-edit-alt me-1"></i> Edit</button>
+										<button class="dropdown-item btn-delete" type="button"><i
+												class="bx bx-trash me-1"></i> Delete</button>
+									</div>
+								</div>
+							</td>
+						</tr>
+						<tr th:if="${#lists.isEmpty(users)}" id="user-empty">
+							<td>No users found.</td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+		<hr class="my-5" />
+	</div>
+
+	<script>
+		(() => {
+			const form = document.getElementById("user-form");
+			const idInput = document.getElementById("user-id");
+			const nameInput = document.getElementById("user-name");
+			const emailInput = document.getElementById("user-email");
+			const passwordInput = document.getElementById("user-password");
+			const roleInput = document.getElementById("user-role");
+			const submitBtn = document.getElementById("user-submit");
+			const resetBtn = document.getElementById("user-reset");
+			const errorEl = document.getElementById("user-error");
+			const emptyRow = document.getElementById("user-empty");
+
+			const clearForm = () => {
+				idInput.value = "";
+				nameInput.value = "";
+				emailInput.value = "";
+				passwordInput.value = "";
+				roleInput.value = "USER";
+				passwordInput.required = true;
+				submitBtn.textContent = "Add User";
+				errorEl.style.display = "none";
+				errorEl.textContent = "";
+			};
+
+			const showError = (message) => {
+				errorEl.textContent = message;
+				errorEl.style.display = "block";
+			};
+
+			resetBtn.addEventListener("click", clearForm);
+
+			form.addEventListener("submit", async (event) => {
+				event.preventDefault();
+				errorEl.style.display = "none";
+				submitBtn.disabled = true;
+
+				const isUpdate = Boolean(idInput.value);
+				const payload = {
+					name: nameInput.value.trim(),
+					email: emailInput.value.trim(),
+					password: passwordInput.value.trim(),
+					role: roleInput.value
+				};
+
+				if (!payload.password) {
+					if (!isUpdate) {
+						showError("Password is required.");
+						submitBtn.disabled = false;
+						return;
+					}
+					payload.password = null;
+				}
+
+				try {
+					const id = idInput.value;
+					const url = id ? `/api/users/${id}` : "/api/users";
+					const method = id ? "PUT" : "POST";
+					const response = await fetch(url, {
+						method,
+						headers: { "Content-Type": "application/json" },
+						body: JSON.stringify(payload)
+					});
+
+					if (!response.ok) {
+						const text = await response.text();
+						throw new Error(text || "Save failed.");
+					}
+
+					window.location.reload();
+				} catch (err) {
+					showError(err.message || "Something went wrong.");
+				} finally {
+					submitBtn.disabled = false;
+				}
+			});
+
+			document.querySelectorAll(".btn-edit").forEach((btn) => {
+				btn.addEventListener("click", () => {
+					const row = btn.closest("tr");
+					idInput.value = row.dataset.id || "";
+					nameInput.value = row.dataset.name || "";
+					emailInput.value = row.dataset.email || "";
+					passwordInput.value = "";
+					roleInput.value = row.dataset.role || "USER";
+					passwordInput.required = false;
+					submitBtn.textContent = "Update User";
+					errorEl.style.display = "none";
+				});
+			});
+
+			document.querySelectorAll(".btn-delete").forEach((btn) => {
+				btn.addEventListener("click", async () => {
+					const row = btn.closest("tr");
+					const id = row.dataset.id;
+					if (!id) {
+						return;
+					}
+					if (!confirm("Delete this user?")) {
+						return;
+					}
+					try {
+						const response = await fetch(`/api/users/${id}`, { method: "DELETE" });
+						if (!response.ok) {
+							const text = await response.text();
+							throw new Error(text || "Delete failed.");
+						}
+						window.location.reload();
+					} catch (err) {
+						showError(err.message || "Something went wrong.");
+					}
+				});
+			});
+
+			clearForm();
+
+			if (emptyRow && emptyRow.style.display !== "none") {
+				emptyRow.style.display = "";
+			}
+
+			dataTables(".table", { pageLength: 10 });
+		})();
+	</script>
+</section>
+
+</html>

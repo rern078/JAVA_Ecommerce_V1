@@ -1,43 +1,55 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
-      th:replace="fragments/layout :: layout('Orders', ~{::section}, 'orders')">
+	th:replace="fragments/layout :: layout('Orders', ~{::section}, 'orders')">
 <section>
-	<div class="page-actions">
-		<a class="link" href="/dashboard">Back to dashboard</a>
+	<div class="container-xxl flex-grow-1 container-p-y">
+		<h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Orders /</span> Orders List</h4>
+		<div class="card">
+			<h5 class="card-header">Orders</h5>
+			<div class="table-responsive text-nowrap">
+				<table class="table">
+					<thead>
+						<tr>
+							<th>ID</th>
+							<th>Customer</th>
+							<th>Status</th>
+							<th>Total</th>
+							<th>Items</th>
+						</tr>
+					</thead>
+					<tbody class="table-border-bottom-0">
+						<tr th:each="order : ${orders}">
+							<td th:text="${order.id}">1</td>
+							<td th:text="${order.customer != null ? order.customer.id : '-'}">-</td>
+							<td th:text="${order.status}">NEW</td>
+							<td th:text="${order.total}">0.00</td>
+							<td>
+								<ul class="mb-0">
+									<li th:each="item : ${order.items}"
+										th:text="${item.product != null ? item.product.name : 'Item'} + ' x' + ${item.quantity} + ' (' + ${item.lineTotal} + ')'">
+										Product x1 (0.00)
+									</li>
+									<li th:if="${#lists.isEmpty(order.items)}">No items</li>
+								</ul>
+							</td>
+						</tr>
+						<tr th:if="${#lists.isEmpty(orders)}">
+							<td>No orders found.</td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+		<hr class="my-5" />
 	</div>
-	<div class="panel">
-		<div class="panel-title">Orders</div>
-		<table class="data-table">
-			<thead>
-			<tr>
-				<th>ID</th>
-				<th>Customer</th>
-				<th>Status</th>
-				<th>Total</th>
-				<th>Items</th>
-			</tr>
-			</thead>
-			<tbody>
-			<tr th:each="order : ${orders}">
-				<td th:text="${order.id}">1</td>
-				<td th:text="${order.customer.id}">1</td>
-				<td th:text="${order.status}">NEW</td>
-				<td th:text="${order.total}">0.00</td>
-				<td>
-					<ul class="items">
-						<li th:each="item : ${order.items}"
-							th:text="${item.product.name} + ' x' + ${item.quantity} + ' (' + ${item.lineTotal} + ')'">
-							Product x1 (0.00)
-						</li>
-						<li th:if="${#lists.isEmpty(order.items)}">No items</li>
-					</ul>
-				</td>
-			</tr>
-			<tr th:if="${#lists.isEmpty(orders)}">
-				<td colspan="5">No orders found.</td>
-			</tr>
-			</tbody>
-		</table>
-	</div>
+
+	<script>
+		dataTables(".table", { pageLength: 10 });
+	</script>
 </section>
+
 </html>

@@ -1,5 +1,6 @@
 package com.example.firstProject.ecommerce.controller;
 
+import com.example.firstProject.ecommerce.model.UserRole;
 import com.example.firstProject.ecommerce.service.AuthService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
@@ -18,8 +19,9 @@ public class AuthController {
 
 	@GetMapping("/login")
 	public String login(HttpSession session) {
-		if (session.getAttribute("userEmail") != null) {
-			return "redirect:/dashboard";
+		String email = (String) session.getAttribute("userEmail");
+		if (email != null) {
+			return redirectByRole(session, email);
 		}
 		return "login";
 	}
@@ -33,14 +35,14 @@ public class AuthController {
 			model.addAttribute("error", "Invalid email or password.");
 			return "login";
 		}
-		session.setAttribute("userEmail", email);
-		return "redirect:/dashboard";
+		return redirectByRole(session, email);
 	}
 
 	@GetMapping("/register")
 	public String register(HttpSession session) {
-		if (session.getAttribute("userEmail") != null) {
-			return "redirect:/dashboard";
+		String email = (String) session.getAttribute("userEmail");
+		if (email != null) {
+			return redirectByRole(session, email);
 		}
 		return "register";
 	}
@@ -57,13 +59,38 @@ public class AuthController {
 			model.addAttribute("error", ex.getMessage());
 			return "register";
 		}
-		session.setAttribute("userEmail", email);
-		return "redirect:/dashboard";
+		return redirectByRole(session, email);
 	}
 
 	@GetMapping("/logout")
 	public String logout(HttpSession session) {
 		session.invalidate();
 		return "redirect:/login";
+	}
+
+	private String redirectByRole(HttpSession session, String email) {
+		String normalizedEmail = email == null ? null : email.toLowerCase();
+		if (normalizedEmail == null) {
+			return "redirect:/login";
+		}
+		UserRole role = resolveRole(session, normalizedEmail);
+		session.setAttribute("userEmail", normalizedEmail);
+		session.setAttribute("userRole", role.name());
+		if (role == UserRole.ADMIN) {
+			return "redirect:/dashboard";
+		}
+		return "redirect:/store";
+	}
+
+	private UserRole resolveRole(HttpSession session, String email) {
+		String sessionEmail = (String) session.getAttribute("userEmail");
+		Object roleAttr = session.getAttribute("userRole");
+		if (email != null && email.equalsIgnoreCase(sessionEmail) && roleAttr instanceof String roleName) {
+			try {
+				return UserRole.valueOf(roleName);
+			} catch (IllegalArgumentException ignored) {
+			}
+		}
+		return authService.getUserRole(email).orElse(UserRole.USER);
 	}
 }

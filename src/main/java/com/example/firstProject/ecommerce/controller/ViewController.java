@@ -12,6 +12,7 @@ import com.example.firstProject.ecommerce.service.CatalogService;
 import com.example.firstProject.ecommerce.service.CategoryService;
 import com.example.firstProject.ecommerce.service.CustomerService;
 import com.example.firstProject.ecommerce.service.OrderService;
+import com.example.firstProject.ecommerce.service.UserService;
 import jakarta.persistence.EntityManager;
 import java.util.List;
 import java.util.Optional;
@@ -30,19 +31,22 @@ public class ViewController {
 	private final AuthService authService;
 	private final CategoryService categoryService;
 	private final EntityManager entityManager;
+	private final UserService userService;
 
 	public ViewController(CatalogService catalogService,
 						  CustomerService customerService,
 						  OrderService orderService,
 						  AuthService authService,
 						  CategoryService categoryService,
-						  EntityManager entityManager) {
+						  EntityManager entityManager,
+						  UserService userService) {
 		this.catalogService = catalogService;
 		this.customerService = customerService;
 		this.orderService = orderService;
 		this.authService = authService;
 		this.categoryService = categoryService;
 		this.entityManager = entityManager;
+		this.userService = userService;
 	}
 
 	@GetMapping
@@ -79,6 +83,12 @@ public class ViewController {
 	public String categories(Model model) {
 		model.addAttribute("categories", categoryService.listCategories());
 		return "categories";
+	}
+
+	@GetMapping("/users")
+	public String users(Model model) {
+		model.addAttribute("users", userService.listUsers());
+		return "users";
 	}
 
 	@GetMapping("/notifications")

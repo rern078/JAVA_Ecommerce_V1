@@ -22,7 +22,9 @@
 							<td th:text="${payment.allowed}"></td>
 						</tr>
 						<tr th:if="${#lists.isEmpty(payments)}">
-							<td colspan="3">No payment methods found.</td>
+							<td>No payment methods found.</td>
+							<td></td>
+							<td></td>
 						</tr>
 					</tbody>
 				</table>
