@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	th:replace="fragments/layout :: layout('Suppliers', ~{::section}, 'suppliers')">
+<section>
+	<div class="container-xxl flex-grow-1 container-p-y">
+		<h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Suppliers /</span> Supplier Form</h4>
+		<div class="row">
+			<div class="col-xl">
+				<div class="card mb-4">
+					<div class="card-header d-flex justify-content-between align-items-center">
+						<h5 class="mb-0">Supplier Form</h5>
+						<small class="text-muted float-end">Supplier Form</small>
+					</div>
+					<div class="card-body">
+						<form id="supplier-form">
+							<input type="hidden" id="supplier-id" />
+							<div class="row g-3">
+								<div class="mb-3 col-md-4">
+									<label class="form-label" for="supplier-company">Company
+										Name</label>
+									<input class="form-control" id="supplier-company"
+										placeholder="Company name" required />
+								</div>
+								<div class="mb-3 col-md-4">
+									<label class="form-label" for="supplier-contact">Contact
+										Name</label>
+									<input class="form-control" id="supplier-contact"
+										placeholder="Contact name" />
+								</div>
+								<div class="mb-3 col-md-4">
+									<label class="form-label" for="supplier-title">Contact
+										Title</label>
+									<input class="form-control" id="supplier-title"
+										placeholder="Contact title" />
+								</div>
+								<div class="mb-3 col-md-6">
+									<label class="form-label" for="supplier-address1">Address
+										1</label>
+									<input class="form-control" id="supplier-address1"
+										placeholder="Address line 1" />
+								</div>
+								<div class="mb-3 col-md-6">
+									<label class="form-label" for="supplier-address2">Address
+										2</label>
+									<input class="form-control" id="supplier-address2"
+										placeholder="Address line 2" />
+								</div>
+								<div class="mb-3 col-md-3">
+									<label class="form-label" for="supplier-city">City</label>
+									<input class="form-control" id="supplier-city"
+										placeholder="City" />
+								</div>
+								<div class="mb-3 col-md-3">
+									<label class="form-label" for="supplier-state">State</label>
+									<input class="form-control" id="supplier-state"
+										placeholder="State" />
+								</div>
+								<div class="mb-3 col-md-3">
+									<label class="form-label" for="supplier-postal">Postal
+										Code</label>
+									<input class="form-control" id="supplier-postal"
+										placeholder="Postal code" />
+								</div>
+								<div class="mb-3 col-md-3">
+									<label class="form-label" for="supplier-country">Country</label>
+									<input class="form-control" id="supplier-country"
+										placeholder="Country" />
+								</div>
+								<div class="mb-3 col-md-4">
+									<label class="form-label" for="supplier-phone">Phone</label>
+									<input class="form-control" id="supplier-phone"
+										placeholder="Phone" />
+								</div>
+								<div class="mb-3 col-md-4">
+									<label class="form-label" for="supplier-fax">Fax</label>
+									<input class="form-control" id="supplier-fax" placeholder="Fax" />
+								</div>
+								<div class="mb-3 col-md-4">
+									<label class="form-label" for="supplier-email">Email</label>
+									<input class="form-control" id="supplier-email" type="email"
+										placeholder="name@example.com" />
+								</div>
+								<div class="mb-3 col-md-6">
+									<label class="form-label" for="supplier-url">Website</label>
+									<input class="form-control" id="supplier-url"
+										placeholder="https://example.com" />
+								</div>
+								<div class="mb-3 col-md-12">
+									<label class="form-label" for="supplier-notes">Notes</label>
+									<textarea class="form-control" id="supplier-notes" rows="3"
+										placeholder="Notes"></textarea>
+								</div>
+								<div class="col-12 d-flex gap-2">
+									<button class="btn btn-primary" type="submit"
+										id="supplier-submit">Add Supplier</button>
+									<button class="btn btn-outline-secondary" type="button"
+										id="supplier-reset">Clear</button>
+								</div>
+								<div class="col-12">
+									<small class="text-danger" id="supplier-error"
+										style="display:none;"></small>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="card">
+			<h5 class="card-header">Suppliers List</h5>
+			<div class="table-responsive text-nowrap">
+				<table class="table">
+					<thead>
+						<tr>
+							<th>ID</th>
+							<th>Company</th>
+							<th>Contact</th>
+							<th>Phone</th>
+							<th>Email</th>
+							<th>City</th>
+							<th>Country</th>
+							<th>Actions</th>
+						</tr>
+					</thead>
+					<tbody class="table-border-bottom-0">
+						<tr th:each="supplier : ${suppliers}" th:attr="data-id=${supplier.id},
+								data-company=${supplier.companyName},
+								data-contact=${supplier.contactName},
+								data-title=${supplier.contactTitle},
+								data-address1=${supplier.address1},
+								data-address2=${supplier.address2},
+								data-city=${supplier.city},
+								data-state=${supplier.state},
+								data-postal=${supplier.postalCode},
+								data-country=${supplier.country},
+								data-phone=${supplier.phone},
+								data-fax=${supplier.fax},
+								data-email=${supplier.email},
+								data-url=${supplier.url},
+								data-notes=${supplier.notes}">
+							<td th:text="${supplier.id}"></td>
+							<td th:text="${supplier.companyName}"></td>
+							<td th:text="${supplier.contactName}"></td>
+							<td th:text="${supplier.phone}"></td>
+							<td th:text="${supplier.email}"></td>
+							<td th:text="${supplier.city}"></td>
+							<td th:text="${supplier.country}"></td>
+							<td>
+								<div class="dropdown">
+									<button type="button" class="btn p-0 dropdown-toggle hide-arrow"
+										data-bs-toggle="dropdown">
+										<i class="bx bx-dots-vertical-rounded"></i>
+									</button>
+									<div class="dropdown-menu">
+										<button class="dropdown-item btn-edit" type="button"><i
+												class="bx bx-edit-alt me-1"></i> Edit</button>
+										<button class="dropdown-item btn-delete" type="button"><i
+												class="bx bx-trash me-1"></i> Delete</button>
+									</div>
+								</div>
+							</td>
+						</tr>
+						<tr th:if="${#lists.isEmpty(suppliers)}">
+							<td>No suppliers found.</td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+		<hr class="my-5" />
+	</div>
+
+	<script>
+		(() => {
+			const form = document.getElementById("supplier-form");
+			const idInput = document.getElementById("supplier-id");
+			const companyInput = document.getElementById("supplier-company");
+			const contactInput = document.getElementById("supplier-contact");
+			const titleInput = document.getElementById("supplier-title");
+			const address1Input = document.getElementById("supplier-address1");
+			const address2Input = document.getElementById("supplier-address2");
+			const cityInput = document.getElementById("supplier-city");
+			const stateInput = document.getElementById("supplier-state");
+			const postalInput = document.getElementById("supplier-postal");
+			const countryInput = document.getElementById("supplier-country");
+			const phoneInput = document.getElementById("supplier-phone");
+			const faxInput = document.getElementById("supplier-fax");
+			const emailInput = document.getElementById("supplier-email");
+			const urlInput = document.getElementById("supplier-url");
+			const notesInput = document.getElementById("supplier-notes");
+			const submitBtn = document.getElementById("supplier-submit");
+			const resetBtn = document.getElementById("supplier-reset");
+			const errorEl = document.getElementById("supplier-error");
+
+			const clearForm = () => {
+				idInput.value = "";
+				companyInput.value = "";
+				contactInput.value = "";
+				titleInput.value = "";
+				address1Input.value = "";
+				address2Input.value = "";
+				cityInput.value = "";
+				stateInput.value = "";
+				postalInput.value = "";
+				countryInput.value = "";
+				phoneInput.value = "";
+				faxInput.value = "";
+				emailInput.value = "";
+				urlInput.value = "";
+				notesInput.value = "";
+				submitBtn.textContent = "Add Supplier";
+				errorEl.style.display = "none";
+				errorEl.textContent = "";
+			};
+
+			const showError = (message) => {
+				errorEl.textContent = message;
+				errorEl.style.display = "block";
+			};
+
+			resetBtn.addEventListener("click", clearForm);
+
+			form.addEventListener("submit", async (event) => {
+				event.preventDefault();
+				errorEl.style.display = "none";
+				submitBtn.disabled = true;
+
+				const payload = {
+					companyName: companyInput.value.trim(),
+					contactName: contactInput.value.trim() || null,
+					contactTitle: titleInput.value.trim() || null,
+					address1: address1Input.value.trim() || null,
+					address2: address2Input.value.trim() || null,
+					city: cityInput.value.trim() || null,
+					state: stateInput.value.trim() || null,
+					postalCode: postalInput.value.trim() || null,
+					country: countryInput.value.trim() || null,
+					phone: phoneInput.value.trim() || null,
+					fax: faxInput.value.trim() || null,
+					email: emailInput.value.trim() || null,
+					url: urlInput.value.trim() || null,
+					notes: notesInput.value.trim() || null
+				};
+
+				try {
+					const id = idInput.value;
+					const url = id ? `/api/admin/suppliers/${id}` : "/api/admin/suppliers";
+					const method = id ? "PUT" : "POST";
+					const response = await fetch(url, {
+						method,
+						headers: { "Content-Type": "application/json" },
+						body: JSON.stringify(payload)
+					});
+
+					if (!response.ok) {
+						const text = await response.text();
+						throw new Error(text || "Save failed.");
+					}
+
+					window.location.reload();
+				} catch (err) {
+					showError(err.message || "Something went wrong.");
+				} finally {
+					submitBtn.disabled = false;
+				}
+			});
+
+			document.querySelectorAll(".btn-edit").forEach((btn) => {
+				btn.addEventListener("click", () => {
+					const row = btn.closest("tr");
+					idInput.value = row.dataset.id || "";
+					companyInput.value = row.dataset.company || "";
+					contactInput.value = row.dataset.contact || "";
+					titleInput.value = row.dataset.title || "";
+					address1Input.value = row.dataset.address1 || "";
+					address2Input.value = row.dataset.address2 || "";
+					cityInput.value = row.dataset.city || "";
+					stateInput.value = row.dataset.state || "";
+					postalInput.value = row.dataset.postal || "";
+					countryInput.value = row.dataset.country || "";
+					phoneInput.value = row.dataset.phone || "";
+					faxInput.value = row.dataset.fax || "";
+					emailInput.value = row.dataset.email || "";
+					urlInput.value = row.dataset.url || "";
+					notesInput.value = row.dataset.notes || "";
+					submitBtn.textContent = "Update Supplier";
+					errorEl.style.display = "none";
+				});
+			});
+
+			document.querySelectorAll(".btn-delete").forEach((btn) => {
+				btn.addEventListener("click", async () => {
+					const row = btn.closest("tr");
+					const id = row.dataset.id;
+					if (!id) {
+						return;
+					}
+					if (!confirm("Delete this supplier?")) {
+						return;
+					}
+					try {
+						const response = await fetch(`/api/admin/suppliers/${id}`, { method: "DELETE" });
+						if (!response.ok) {
+							const text = await response.text();
+							throw new Error(text || "Delete failed.");
+						}
+						window.location.reload();
+					} catch (err) {
+						showError(err.message || "Something went wrong.");
+					}
+				});
+			});
+
+			clearForm();
+			dataTables(".table", { pageLength: 10 });
+		})();
+	</script>
+</section>
+
+</html>

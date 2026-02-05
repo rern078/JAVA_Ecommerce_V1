@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	th:replace="fragments/layout :: layout('Shippings', ~{::section}, 'shippings')">
+<section>
+	<div class="container-xxl flex-grow-1 container-p-y">
+		<h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Shippings /</span> Shipping Form</h4>
+		<div class="row">
+			<div class="col-xl">
+				<div class="card mb-4">
+					<div class="card-header d-flex justify-content-between align-items-center">
+						<h5 class="mb-0">Shipping Form</h5>
+						<small class="text-muted float-end">Shipping Form</small>
+					</div>
+					<div class="card-body">
+						<form id="shipping-form">
+							<input type="hidden" id="shipping-id" />
+							<div class="row g-3">
+								<div class="mb-3 col-md-4">
+									<label class="form-label" for="shipping-name">Name</label>
+									<input class="form-control" id="shipping-name" placeholder="Shipping name" />
+								</div>
+								<div class="mb-3 col-md-4">
+									<label class="form-label" for="shipping-icon">Icon Path</label>
+									<input class="form-control" id="shipping-icon" placeholder="/images/icon.png" />
+								</div>
+								<div class="mb-3 col-md-4 d-flex align-items-end">
+									<div class="form-check">
+										<input class="form-check-input" type="checkbox" id="shipping-active" />
+										<label class="form-check-label" for="shipping-active">Active</label>
+									</div>
+								</div>
+								<div class="col-12 d-flex gap-2">
+									<button class="btn btn-primary" type="submit" id="shipping-submit">Add Shipping</button>
+									<button class="btn btn-outline-secondary" type="button"
+										id="shipping-reset">Clear</button>
+								</div>
+								<div class="col-12">
+									<small class="text-danger" id="shipping-error" style="display:none;"></small>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="card">
+			<h5 class="card-header">Shippings List</h5>
+			<div class="table-responsive text-nowrap">
+				<table class="table">
+					<thead>
+						<tr>
+							<th>ID</th>
+							<th>Name</th>
+							<th>Active</th>
+							<th>Icon</th>
+							<th>Actions</th>
+						</tr>
+					</thead>
+					<tbody class="table-border-bottom-0">
+						<tr th:each="shipping : ${shippings}"
+							th:attr="data-id=${shipping.id},
+								data-name=${shipping.name},
+								data-active=${shipping.active},
+								data-icon=${shipping.iconPath}">
+							<td th:text="${shipping.id}"></td>
+							<td th:text="${shipping.name}"></td>
+							<td th:text="${shipping.active}"></td>
+							<td th:text="${shipping.iconPath}"></td>
+							<td>
+								<div class="dropdown">
+									<button type="button" class="btn p-0 dropdown-toggle hide-arrow"
+										data-bs-toggle="dropdown">
+										<i class="bx bx-dots-vertical-rounded"></i>
+									</button>
+									<div class="dropdown-menu">
+										<button class="dropdown-item btn-edit" type="button"><i
+												class="bx bx-edit-alt me-1"></i> Edit</button>
+										<button class="dropdown-item btn-delete" type="button"><i
+												class="bx bx-trash me-1"></i> Delete</button>
+									</div>
+								</div>
+							</td>
+						</tr>
+						<tr th:if="${#lists.isEmpty(shippings)}">
+							<td>No shippings found.</td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+		<hr class="my-5" />
+	</div>
+
+	<script>
+		(() => {
+			const form = document.getElementById("shipping-form");
+			const idInput = document.getElementById("shipping-id");
+			const nameInput = document.getElementById("shipping-name");
+			const iconInput = document.getElementById("shipping-icon");
+			const activeInput = document.getElementById("shipping-active");
+			const submitBtn = document.getElementById("shipping-submit");
+			const resetBtn = document.getElementById("shipping-reset");
+			const errorEl = document.getElementById("shipping-error");
+
+			const clearForm = () => {
+				idInput.value = "";
+				nameInput.value = "";
+				iconInput.value = "";
+				activeInput.checked = false;
+				submitBtn.textContent = "Add Shipping";
+				errorEl.style.display = "none";
+				errorEl.textContent = "";
+			};
+
+			const showError = (message) => {
+				errorEl.textContent = message;
+				errorEl.style.display = "block";
+			};
+
+			resetBtn.addEventListener("click", clearForm);
+
+			form.addEventListener("submit", async (event) => {
+				event.preventDefault();
+				errorEl.style.display = "none";
+				submitBtn.disabled = true;
+
+				const payload = {
+					name: nameInput.value.trim() || null,
+					active: activeInput.checked,
+					iconPath: iconInput.value.trim() || null
+				};
+
+				try {
+					const id = idInput.value;
+					const url = id ? `/api/admin/shippings/${id}` : "/api/admin/shippings";
+					const method = id ? "PUT" : "POST";
+					const response = await fetch(url, {
+						method,
+						headers: { "Content-Type": "application/json" },
+						body: JSON.stringify(payload)
+					});
+
+					if (!response.ok) {
+						const text = await response.text();
+						throw new Error(text || "Save failed.");
+					}
+
+					window.location.reload();
+				} catch (err) {
+					showError(err.message || "Something went wrong.");
+				} finally {
+					submitBtn.disabled = false;
+				}
+			});
+
+			document.querySelectorAll(".btn-edit").forEach((btn) => {
+				btn.addEventListener("click", () => {
+					const row = btn.closest("tr");
+					idInput.value = row.dataset.id || "";
+					nameInput.value = row.dataset.name || "";
+					iconInput.value = row.dataset.icon || "";
+					activeInput.checked = row.dataset.active === "true";
+					submitBtn.textContent = "Update Shipping";
+					errorEl.style.display = "none";
+				});
+			});
+
+			document.querySelectorAll(".btn-delete").forEach((btn) => {
+				btn.addEventListener("click", async () => {
+					const row = btn.closest("tr");
+					const id = row.dataset.id;
+					if (!id) {
+						return;
+					}
+					if (!confirm("Delete this shipping?")) {
+						return;
+					}
+					try {
+						const response = await fetch(`/api/admin/shippings/${id}`, { method: "DELETE" });
+						if (!response.ok) {
+							const text = await response.text();
+							throw new Error(text || "Delete failed.");
+						}
+						window.location.reload();
+					} catch (err) {
+						showError(err.message || "Something went wrong.");
+					}
+				});
+			});
+
+			clearForm();
+			dataTables(".table", { pageLength: 10 });
+		})();
+	</script>
+</section>
+
+</html>

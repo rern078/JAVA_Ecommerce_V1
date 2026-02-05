@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	th:replace="fragments/layout :: layout('Slideshows', ~{::section}, 'slideshows')">
+<section>
+	<div class="container-xxl flex-grow-1 container-p-y">
+		<h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Slideshows /</span> Slideshow Form</h4>
+		<div class="row">
+			<div class="col-xl">
+				<div class="card mb-4">
+					<div class="card-header d-flex justify-content-between align-items-center">
+						<h5 class="mb-0">Slideshow Form</h5>
+						<small class="text-muted float-end">Slideshow Form</small>
+					</div>
+					<div class="card-body">
+						<form id="slideshow-form">
+							<input type="hidden" id="slideshow-id" />
+							<div class="row g-3">
+								<div class="mb-3 col-md-6">
+									<label class="form-label" for="slideshow-destination">Destination
+										URL</label>
+									<input class="form-control" id="slideshow-destination"
+										placeholder="https://example.com" />
+								</div>
+								<div class="mb-3 col-md-6">
+									<label class="form-label" for="slideshow-image">Image URL</label>
+									<input class="form-control" id="slideshow-image" type="file"
+										accept="image/*" />
+									<input id="slideshow-image-existing" type="hidden" />
+									<div class="mt-2">
+										<img id="slideshow-image-preview" alt="Preview"
+											style="max-height: 80px; display: none;" />
+									</div>
+								</div>
+								<div class="mb-3 col-md-4">
+									<label class="form-label" for="slideshow-clicks">Clicks</label>
+									<input class="form-control" id="slideshow-clicks" type="number"
+										min="0" placeholder="0" />
+								</div>
+								<div class="col-12 d-flex gap-2">
+									<button class="btn btn-primary" type="submit"
+										id="slideshow-submit">Add Slideshow</button>
+									<button class="btn btn-outline-secondary" type="button"
+										id="slideshow-reset">Clear</button>
+								</div>
+								<div class="col-12">
+									<small class="text-danger" id="slideshow-error"
+										style="display:none;"></small>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="card">
+			<h5 class="card-header">Slideshows List</h5>
+			<div class="table-responsive text-nowrap">
+				<table class="table">
+					<thead>
+						<tr>
+							<th>ID</th>
+							<th>Destination</th>
+							<th>Image</th>
+							<th>Clicks</th>
+							<th>Actions</th>
+						</tr>
+					</thead>
+					<tbody class="table-border-bottom-0">
+						<tr th:each="slideshow : ${slideshows}" th:attr="data-id=${slideshow.id},
+								data-destination=${slideshow.destinationUrl},
+								data-image=${slideshow.imageUrl},
+								data-clicks=${slideshow.clicks}">
+							<td th:text="${slideshow.id}"></td>
+							<td th:text="${slideshow.destinationUrl}"></td>
+							<td th:text="${slideshow.imageUrl}"></td>
+							<td th:text="${slideshow.clicks}"></td>
+							<td>
+								<div class="dropdown">
+									<button type="button" class="btn p-0 dropdown-toggle hide-arrow"
+										data-bs-toggle="dropdown">
+										<i class="bx bx-dots-vertical-rounded"></i>
+									</button>
+									<div class="dropdown-menu">
+										<button class="dropdown-item btn-edit" type="button"><i
+												class="bx bx-edit-alt me-1"></i> Edit</button>
+										<button class="dropdown-item btn-delete" type="button"><i
+												class="bx bx-trash me-1"></i> Delete</button>
+									</div>
+								</div>
+							</td>
+						</tr>
+						<tr th:if="${#lists.isEmpty(slideshows)}">
+							<td>No slideshows found.</td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+		<hr class="my-5" />
+	</div>
+
+	<script>
+		(() => {
+			const form = document.getElementById("slideshow-form");
+			const idInput = document.getElementById("slideshow-id");
+			const destinationInput = document.getElementById("slideshow-destination");
+			const imageInput = document.getElementById("slideshow-image");
+			const existingImageInput = document.getElementById("slideshow-image-existing");
+			const imagePreview = document.getElementById("slideshow-image-preview");
+			const clicksInput = document.getElementById("slideshow-clicks");
+			const submitBtn = document.getElementById("slideshow-submit");
+			const resetBtn = document.getElementById("slideshow-reset");
+			const errorEl = document.getElementById("slideshow-error");
+
+			const clearForm = () => {
+				idInput.value = "";
+				destinationInput.value = "";
+				imageInput.value = "";
+				existingImageInput.value = "";
+				imagePreview.src = "";
+				imagePreview.style.display = "none";
+				clicksInput.value = "";
+				submitBtn.textContent = "Add Slideshow";
+				errorEl.style.display = "none";
+				errorEl.textContent = "";
+			};
+
+			const showError = (message) => {
+				errorEl.textContent = message;
+				errorEl.style.display = "block";
+			};
+
+			resetBtn.addEventListener("click", clearForm);
+
+			imageInput.addEventListener("change", () => {
+				const selectedFile = imageInput.files && imageInput.files[0];
+				if (!selectedFile) {
+					imagePreview.src = "";
+					imagePreview.style.display = "none";
+					return;
+				}
+				const previewUrl = URL.createObjectURL(selectedFile);
+				imagePreview.src = previewUrl;
+				imagePreview.style.display = "inline-block";
+			});
+
+			const uploadImage = async (file) => {
+				const formData = new FormData();
+				formData.append("file", file);
+				const response = await fetch("/api/uploads/slideshows", {
+					method: "POST",
+					body: formData
+				});
+				if (!response.ok) {
+					const text = await response.text();
+					throw new Error(text || "Image upload failed.");
+				}
+				const data = await response.json();
+				return data.url;
+			};
+
+			form.addEventListener("submit", async (event) => {
+				event.preventDefault();
+				errorEl.style.display = "none";
+				submitBtn.disabled = true;
+
+				const selectedFile = imageInput.files && imageInput.files[0];
+				let imageValue = existingImageInput.value.trim() || null;
+				if (selectedFile) {
+					imageValue = await uploadImage(selectedFile);
+				}
+
+				const payload = {
+					destinationUrl: destinationInput.value.trim() || null,
+					imageUrl: imageValue,
+					clicks: clicksInput.value ? Number(clicksInput.value) : null
+				};
+
+				try {
+					const id = idInput.value;
+					const url = id ? `/api/admin/slideshows/${id}` : "/api/admin/slideshows";
+					const method = id ? "PUT" : "POST";
+					const response = await fetch(url, {
+						method,
+						headers: { "Content-Type": "application/json" },
+						body: JSON.stringify(payload)
+					});
+
+					if (!response.ok) {
+						const text = await response.text();
+						throw new Error(text || "Save failed.");
+					}
+
+					window.location.reload();
+				} catch (err) {
+					showError(err.message || "Something went wrong.");
+				} finally {
+					submitBtn.disabled = false;
+				}
+			});
+
+			document.querySelectorAll(".btn-edit").forEach((btn) => {
+				btn.addEventListener("click", () => {
+					const row = btn.closest("tr");
+					idInput.value = row.dataset.id || "";
+					destinationInput.value = row.dataset.destination || "";
+					imageInput.value = "";
+					existingImageInput.value = row.dataset.image || "";
+					if (existingImageInput.value) {
+						imagePreview.src = existingImageInput.value;
+						imagePreview.style.display = "inline-block";
+					} else {
+						imagePreview.src = "";
+						imagePreview.style.display = "none";
+					}
+					clicksInput.value = row.dataset.clicks || "";
+					submitBtn.textContent = "Update Slideshow";
+					errorEl.style.display = "none";
+				});
+			});
+
+			document.querySelectorAll(".btn-delete").forEach((btn) => {
+				btn.addEventListener("click", async () => {
+					const row = btn.closest("tr");
+					const id = row.dataset.id;
+					if (!id) {
+						return;
+					}
+					if (!confirm("Delete this slideshow?")) {
+						return;
+					}
+					try {
+						const response = await fetch(`/api/admin/slideshows/${id}`, { method: "DELETE" });
+						if (!response.ok) {
+							const text = await response.text();
+							throw new Error(text || "Delete failed.");
+						}
+						window.location.reload();
+					} catch (err) {
+						showError(err.message || "Something went wrong.");
+					}
+				});
+			});
+
+			clearForm();
+			dataTables(".table", { pageLength: 10 });
+		})();
+	</script>
+</section>
+
+</html>

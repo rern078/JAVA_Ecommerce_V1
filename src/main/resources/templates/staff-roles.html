@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	th:replace="fragments/layout :: layout('Staff Roles', ~{::section}, 'staff-roles')">
+<section>
+	<div class="container-xxl flex-grow-1 container-p-y">
+		<h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Staff /</span> Staff Roles</h4>
+		<div class="row">
+			<div class="col-xl">
+				<div class="card mb-4">
+					<div class="card-header d-flex justify-content-between align-items-center">
+						<h5 class="mb-0">Staff Role Form</h5>
+						<small class="text-muted float-end">Staff Role Form</small>
+					</div>
+					<div class="card-body">
+						<form id="staff-role-form">
+							<input type="hidden" id="staff-role-old-staff" />
+							<input type="hidden" id="staff-role-old-role" />
+							<div class="row g-3">
+								<div class="mb-3 col-md-6">
+									<label class="form-label" for="staff-role-staff">Staff
+										Account</label>
+									<select class="form-select" id="staff-role-staff" required>
+										<option value="">Select staff</option>
+										<option th:each="staff : ${staffAccounts}"
+											th:value="${staff.id}" th:text="${staff.email}">
+										</option>
+									</select>
+								</div>
+								<div class="mb-3 col-md-6">
+									<label class="form-label" for="staff-role-role">Role</label>
+									<select class="form-select" id="staff-role-role" required>
+										<option value="">Select role</option>
+										<option th:each="role : ${roles}" th:value="${role.id}"
+											th:text="${role.roleName}">
+										</option>
+									</select>
+								</div>
+								<div class="col-12 d-flex gap-2">
+									<button class="btn btn-primary" type="submit"
+										id="staff-role-submit">Add Staff Role</button>
+									<button class="btn btn-outline-secondary" type="button"
+										id="staff-role-reset">Clear</button>
+								</div>
+								<div class="col-12">
+									<small class="text-danger" id="staff-role-error"
+										style="display:none;"></small>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="card">
+			<h5 class="card-header">Staff Roles List</h5>
+			<div class="table-responsive text-nowrap">
+				<table class="table">
+					<thead>
+						<tr>
+							<th>Staff</th>
+							<th>Role</th>
+							<th>Actions</th>
+						</tr>
+					</thead>
+					<tbody class="table-border-bottom-0">
+						<tr th:each="staffRole : ${staffRoles}" th:attr="data-staff-id=${staffRole.staff != null ? staffRole.staff.id : ''},
+								data-role-id=${staffRole.role != null ? staffRole.role.id : ''}">
+							<td th:text="${staffRole.staff != null ? staffRole.staff.email : '-'}"></td>
+							<td th:text="${staffRole.role != null ? staffRole.role.roleName : '-'}"></td>
+							<td>
+								<div class="dropdown">
+									<button type="button" class="btn p-0 dropdown-toggle hide-arrow"
+										data-bs-toggle="dropdown">
+										<i class="bx bx-dots-vertical-rounded"></i>
+									</button>
+									<div class="dropdown-menu">
+										<button class="dropdown-item btn-edit" type="button"><i
+												class="bx bx-edit-alt me-1"></i> Edit</button>
+										<button class="dropdown-item btn-delete" type="button"><i
+												class="bx bx-trash me-1"></i> Delete</button>
+									</div>
+								</div>
+							</td>
+						</tr>
+						<tr th:if="${#lists.isEmpty(staffRoles)}">
+							<td>No staff roles found.</td>
+							<td></td>
+							<td></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+		<hr class="my-5" />
+	</div>
+
+	<script>
+		(() => {
+			const form = document.getElementById("staff-role-form");
+			const staffInput = document.getElementById("staff-role-staff");
+			const roleInput = document.getElementById("staff-role-role");
+			const oldStaffInput = document.getElementById("staff-role-old-staff");
+			const oldRoleInput = document.getElementById("staff-role-old-role");
+			const submitBtn = document.getElementById("staff-role-submit");
+			const resetBtn = document.getElementById("staff-role-reset");
+			const errorEl = document.getElementById("staff-role-error");
+
+			const clearForm = () => {
+				staffInput.value = "";
+				roleInput.value = "";
+				oldStaffInput.value = "";
+				oldRoleInput.value = "";
+				submitBtn.textContent = "Add Staff Role";
+				errorEl.style.display = "none";
+				errorEl.textContent = "";
+			};
+
+			const showError = (message) => {
+				errorEl.textContent = message;
+				errorEl.style.display = "block";
+			};
+
+			resetBtn.addEventListener("click", clearForm);
+
+			form.addEventListener("submit", async (event) => {
+				event.preventDefault();
+				errorEl.style.display = "none";
+				submitBtn.disabled = true;
+
+				const payload = {
+					staffId: staffInput.value,
+					roleId: roleInput.value ? Number(roleInput.value) : null
+				};
+
+				try {
+					const oldStaff = oldStaffInput.value;
+					const oldRole = oldRoleInput.value;
+					const url = oldStaff && oldRole
+						? `/api/admin/staff-roles/${oldStaff}/${oldRole}`
+						: "/api/admin/staff-roles";
+					const method = oldStaff && oldRole ? "PUT" : "POST";
+					const response = await fetch(url, {
+						method,
+						headers: { "Content-Type": "application/json" },
+						body: JSON.stringify(payload)
+					});
+
+					if (!response.ok) {
+						const text = await response.text();
+						throw new Error(text || "Save failed.");
+					}
+
+					window.location.reload();
+				} catch (err) {
+					showError(err.message || "Something went wrong.");
+				} finally {
+					submitBtn.disabled = false;
+				}
+			});
+
+			document.querySelectorAll(".btn-edit").forEach((btn) => {
+				btn.addEventListener("click", () => {
+					const row = btn.closest("tr");
+					const staffId = row.dataset.staffId || "";
+					const roleId = row.dataset.roleId || "";
+					staffInput.value = staffId;
+					roleInput.value = roleId;
+					oldStaffInput.value = staffId;
+					oldRoleInput.value = roleId;
+					submitBtn.textContent = "Update Staff Role";
+					errorEl.style.display = "none";
+				});
+			});
+
+			document.querySelectorAll(".btn-delete").forEach((btn) => {
+				btn.addEventListener("click", async () => {
+					const row = btn.closest("tr");
+					const staffId = row.dataset.staffId;
+					const roleId = row.dataset.roleId;
+					if (!staffId || !roleId) {
+						return;
+					}
+					if (!confirm("Delete this staff role?")) {
+						return;
+					}
+					try {
+						const response = await fetch(`/api/admin/staff-roles/${staffId}/${roleId}`, {
+							method: "DELETE"
+						});
+						if (!response.ok) {
+							const text = await response.text();
+							throw new Error(text || "Delete failed.");
+						}
+						window.location.reload();
+					} catch (err) {
+						showError(err.message || "Something went wrong.");
+					}
+				});
+			});
+
+			clearForm();
+			dataTables(".table", { pageLength: 10 });
+		})();
+	</script>
+</section>
+
+</html>

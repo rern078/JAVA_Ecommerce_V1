@@ -111,6 +111,61 @@
                   </a>
             </li>
             <li class="menu-item"
+                  th:classappend="${activePage == 'roles' or activePage == 'sells' or activePage == 'shippers' or activePage == 'shippings' or activePage == 'slideshows' or activePage == 'staff-accounts' or activePage == 'staff-roles' or activePage == 'suppliers' or activePage == 'tags'} ? ' active'">
+                  <a href="javascript:void(0);" class="menu-link menu-toggle">
+                        <i class="menu-icon tf-icons bx bx-table"></i>
+                        <div data-i18n="Layouts">Admin Tables</div>
+                  </a>
+
+                  <ul class="menu-sub">
+                        <li class="menu-item" th:classappend="${activePage == 'roles'} ? 'active' : ''">
+                              <a href="/dashboard/roles" class="menu-link">
+                                    <div data-i18n="Without menu">Roles</div>
+                              </a>
+                        </li>
+                        <li class="menu-item" th:classappend="${activePage == 'sells'} ? 'active' : ''">
+                              <a href="/dashboard/sells" class="menu-link">
+                                    <div data-i18n="Without menu">Sells</div>
+                              </a>
+                        </li>
+                        <li class="menu-item" th:classappend="${activePage == 'shippers'} ? 'active' : ''">
+                              <a href="/dashboard/shippers" class="menu-link">
+                                    <div data-i18n="Without menu">Shippers</div>
+                              </a>
+                        </li>
+                        <li class="menu-item" th:classappend="${activePage == 'shippings'} ? 'active' : ''">
+                              <a href="/dashboard/shippings" class="menu-link">
+                                    <div data-i18n="Without menu">Shippings</div>
+                              </a>
+                        </li>
+                        <li class="menu-item" th:classappend="${activePage == 'slideshows'} ? 'active' : ''">
+                              <a href="/dashboard/slideshows" class="menu-link">
+                                    <div data-i18n="Without menu">Slideshows</div>
+                              </a>
+                        </li>
+                        <li class="menu-item" th:classappend="${activePage == 'staff-accounts'} ? 'active' : ''">
+                              <a href="/dashboard/staff-accounts" class="menu-link">
+                                    <div data-i18n="Without menu">Staff Accounts</div>
+                              </a>
+                        </li>
+                        <li class="menu-item" th:classappend="${activePage == 'staff-roles'} ? 'active' : ''">
+                              <a href="/dashboard/staff-roles" class="menu-link">
+                                    <div data-i18n="Without menu">Staff Roles</div>
+                              </a>
+                        </li>
+                        <li class="menu-item" th:classappend="${activePage == 'suppliers'} ? 'active' : ''">
+                              <a href="/dashboard/suppliers" class="menu-link">
+                                    <div data-i18n="Without menu">Suppliers</div>
+                              </a>
+                        </li>
+                        <li class="menu-item" th:classappend="${activePage == 'tags'} ? 'active' : ''">
+                              <a href="/dashboard/tags" class="menu-link">
+                                    <div data-i18n="Without menu">Tags</div>
+                              </a>
+                        </li>
+                  </ul>
+            </li>
+            <li class="menu-item"
                   th:classappend="${activePage == 'orders' or activePage == 'order-items' or activePage == 'order-statuses' or activePage == 'payments' or activePage == 'notifications'} ? ' active'">
                   <a href="javascript:void(0);" class="menu-link menu-toggle">
                         <i class="menu-icon tf-icons bx bx-cart"></i>
@@ -192,12 +247,13 @@
                                     <div data-i18n="Basic">Forgot Password</div>
                               </a>
                         </li>
-                        <li class="menu-item">
-                              <a href="/logout" class="menu-link" target="_blank">
-                                    <div data-i18n="Basic">Logout</div>
-                              </a>
-                        </li>
                   </ul>
+            </li>
+            <li class="menu-item">
+                  <a href="/logout" class="menu-link">
+                        <i class="menu-icon tf-icons bx bx-log-out"></i>
+                        <div data-i18n="Logout">Logout</div>
+                  </a>
             </li>
             <!-- Misc -->
             <li class="menu-header small text-uppercase"><span class="menu-header-text">Misc</span>

@@ -22,6 +22,10 @@ public class UploadController {
 			Paths.get("src/main/resources/static/uploads/categories");
 	private static final Path PRODUCT_UPLOAD_DIR =
 			Paths.get("src/main/resources/static/uploads/products");
+	private static final Path STAFF_UPLOAD_DIR =
+			Paths.get("src/main/resources/static/uploads/staff");
+	private static final Path SLIDESHOW_UPLOAD_DIR =
+			Paths.get("src/main/resources/static/uploads/slideshows");
 
 	@PostMapping("/categories")
 	public ResponseEntity<?> uploadCategoryImage(@RequestParam("file") MultipartFile file) {
@@ -53,6 +57,42 @@ public class UploadController {
 			Path target = PRODUCT_UPLOAD_DIR.resolve(filename);
 			Files.copy(file.getInputStream(), target, StandardCopyOption.REPLACE_EXISTING);
 			return ResponseEntity.ok(Map.of("url", "/uploads/products/" + filename));
+		} catch (IOException ex) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+					.body("Failed to store file.");
+		}
+	}
+
+	@PostMapping("/staff")
+	public ResponseEntity<?> uploadStaffImage(@RequestParam("file") MultipartFile file) {
+		if (file == null || file.isEmpty()) {
+			return ResponseEntity.badRequest().body("File is required.");
+		}
+
+		try {
+			Files.createDirectories(STAFF_UPLOAD_DIR);
+			String filename = buildFilename(file.getOriginalFilename());
+			Path target = STAFF_UPLOAD_DIR.resolve(filename);
+			Files.copy(file.getInputStream(), target, StandardCopyOption.REPLACE_EXISTING);
+			return ResponseEntity.ok(Map.of("url", "/uploads/staff/" + filename));
+		} catch (IOException ex) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+					.body("Failed to store file.");
+		}
+	}
+
+	@PostMapping("/slideshows")
+	public ResponseEntity<?> uploadSlideshowImage(@RequestParam("file") MultipartFile file) {
+		if (file == null || file.isEmpty()) {
+			return ResponseEntity.badRequest().body("File is required.");
+		}
+
+		try {
+			Files.createDirectories(SLIDESHOW_UPLOAD_DIR);
+			String filename = buildFilename(file.getOriginalFilename());
+			Path target = SLIDESHOW_UPLOAD_DIR.resolve(filename);
+			Files.copy(file.getInputStream(), target, StandardCopyOption.REPLACE_EXISTING);
+			return ResponseEntity.ok(Map.of("url", "/uploads/slideshows/" + filename));
 		} catch (IOException ex) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
 					.body("Failed to store file.");
