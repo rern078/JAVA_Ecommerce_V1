@@ -21,7 +21,8 @@
 							<td th:each="header : ${headers}" th:text="${row[header]}"></td>
 						</tr>
 						<tr th:if="${#lists.isEmpty(rows)}">
-							<td th:colspan="${headers.size()}">No rows found.</td>
+							<td th:each="header, iter : ${headers}"
+								th:text="${iter.index == 0 ? 'No rows found.' : ''}"></td>
 						</tr>
 					</tbody>
 				</table>
