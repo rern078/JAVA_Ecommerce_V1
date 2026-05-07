@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	th:replace="fragments/layout :: layout('Models', ~{::section}, 'models')">
+<section>
+	<div class="container-xxl flex-grow-1 container-p-y">
+		<h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Models /</span> All Models</h4>
+		<div class="card">
+			<h5 class="card-header">Models</h5>
+			<div class="table-responsive text-nowrap">
+				<table class="table">
+					<thead>
+						<tr>
+							<th>Name</th>
+							<th>Slug</th>
+							<th>Open</th>
+						</tr>
+					</thead>
+					<tbody class="table-border-bottom-0">
+						<tr th:each="modelItem : ${models}">
+							<td th:text="${modelItem.label()}"></td>
+							<td th:text="${modelItem.slug()}"></td>
+							<td>
+								<a class="btn btn-sm btn-primary"
+									th:href="@{|/dashboard/models/${modelItem.slug()}|}">View</a>
+							</td>
+						</tr>
+						<tr th:if="${#lists.isEmpty(models)}">
+							<td>No models found.</td>
+							<td></td>
+							<td></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+		<hr class="my-5" />
+	</div>
+
+	<script>
+		dataTables(".table", { pageLength: 15 });
+	</script>
+</section>
+
+</html>

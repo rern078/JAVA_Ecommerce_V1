@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	th:replace="fragments/layout :: layout(${modelLabel}, ~{::section}, 'models')">
+<section>
+	<div class="container-xxl flex-grow-1 container-p-y">
+		<h4 class="fw-bold py-3 mb-4">
+			<span class="text-muted fw-light">Models /</span>
+			<span th:text="${modelLabel}">Model</span>
+		</h4>
+		<div class="card">
+			<h5 class="card-header" th:text="${modelLabel}">Model</h5>
+			<div class="table-responsive text-nowrap">
+				<table class="table">
+					<thead>
+						<tr>
+							<th th:each="header : ${headers}" th:text="${header}"></th>
+						</tr>
+					</thead>
+					<tbody class="table-border-bottom-0">
+						<tr th:each="row : ${rows}">
+							<td th:each="header : ${headers}" th:text="${row[header]}"></td>
+						</tr>
+						<tr th:if="${#lists.isEmpty(rows)}">
+							<td th:each="header, iter : ${headers}"
+								th:text="${iter.index == 0 ? 'No rows found.' : ''}"></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+		<hr class="my-5" />
+	</div>
+
+	<script>
+		dataTables(".table", { pageLength: 10 });
+	</script>
+</section>
+
+</html>

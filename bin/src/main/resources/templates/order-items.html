@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	th:replace="fragments/layout :: layout('Order Items', ~{::section}, 'order-items')">
+<section>
+	<div class="container-xxl flex-grow-1 container-p-y">
+		<h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Orders /</span> Order Items</h4>
+		<div class="card">
+			<h5 class="card-header">Order Items</h5>
+			<div class="table-responsive text-nowrap">
+				<table class="table">
+					<thead>
+						<tr>
+							<th>ID</th>
+							<th>Order</th>
+							<th>Product</th>
+							<th>Quantity</th>
+							<th>Unit Price</th>
+							<th>Line Total</th>
+							<th>Discount</th>
+							<th>ID SKU</th>
+							<th>Size</th>
+							<th>Color</th>
+							<th>Fulfilled</th>
+							<th>Ship Date</th>
+							<th>Bill Date</th>
+						</tr>
+					</thead>
+					<tbody class="table-border-bottom-0">
+						<tr th:each="item : ${orderItems}">
+							<td th:text="${item.id}"></td>
+							<td th:text="${item.order != null ? item.order.id : '-'}"></td>
+							<td th:text="${item.product != null ? item.product.name : '-'}"></td>
+							<td th:text="${item.quantity}"></td>
+							<td th:text="${item.unitPrice}"></td>
+							<td th:text="${item.lineTotal}"></td>
+							<td th:text="${item.discount}"></td>
+							<td th:text="${item.idSku}"></td>
+							<td th:text="${item.size}"></td>
+							<td th:text="${item.color}"></td>
+							<td th:text="${item.fulfilled}"></td>
+							<td th:text="${item.shipDate}"></td>
+							<td th:text="${item.billDate}"></td>
+						</tr>
+						<tr th:if="${#lists.isEmpty(orderItems)}">
+							<td>No order items found.</td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+		<hr class="my-5" />
+	</div>
+
+	<script>
+		dataTables(".table", { pageLength: 10 });
+	</script>
+</section>
+
+</html>

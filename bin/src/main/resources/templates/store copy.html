@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<title>Stroyka Store</title>
+	<link rel="stylesheet" href="/css/store.css">
+	<link rel="stylesheet" href="/static/css/linearicons.css">
+	<link rel="stylesheet" href="/static/css/font-awesome.min.css">
+	<link rel="stylesheet" href="/static/css/themify-icons.css">
+	<link rel="stylesheet" href="/static/css/bootstrap.css">
+	<link rel="stylesheet" href="/static/css/owl.carousel.css">
+	<link rel="stylesheet" href="/static/css/nice-select.css">
+	<link rel="stylesheet" href="/static/css/nouislider.min.css">
+	<link rel="stylesheet" href="/static/css/ion.rangeSlider.css" />
+	<link rel="stylesheet" href="/static/css/ion.rangeSlider.skinFlat.css" />
+	<link rel="stylesheet" href="/static/css/magnific-popup.css">
+	<link rel="stylesheet" href="/static/css/main.css">
+</head>
+
+<body>
+	<header class="store-header">
+		<div class="brand">
+			<span class="brand-logo">ST</span>
+			<span class="brand-text">STROYKA</span>
+		</div>
+		<nav class="store-nav">
+			<a href="/store">Home</a>
+			<a href="/dashboard/products">Admin Catalog</a>
+			<a href="/login">Login</a>
+		</nav>
+	</header>
+
+	<main class="store-main">
+		<section class="hero">
+			<div class="hero-content">
+				<h1>Upgrade your workspace</h1>
+				<p>Discover curated tech accessories for productivity and comfort.</p>
+				<div class="hero-actions">
+					<a class="btn primary" href="#products">Shop now</a>
+					<a class="btn ghost" href="/dashboard">Admin dashboard</a>
+				</div>
+			</div>
+			<div class="hero-card">
+				<h3>Today’s deal</h3>
+				<p>Save 20% on select bundles.</p>
+				<div class="price-tag">$129.00</div>
+			</div>
+		</section>
+
+		<section id="products" class="product-section">
+			<div class="section-header">
+				<h2>Featured products</h2>
+				<p>Based on your latest inventory.</p>
+			</div>
+			<div class="product-grid">
+				<div class="product-card" th:each="product : ${products}">
+					<div class="product-photo">
+						<span th:text="${product.name}">Product</span>
+					</div>
+					<div class="product-body">
+						<h3 th:text="${product.name}">Wireless Mouse</h3>
+						<p class="product-desc" th:text="${product.description}">Description</p>
+						<div class="product-meta">
+							<span class="price" th:text="${product.price}">$0.00</span>
+							<span class="stock" th:text="'Stock: ' + ${product.stock}">Stock</span>
+						</div>
+						<button class="btn primary" type="button">Add to cart</button>
+					</div>
+				</div>
+				<div class="empty-state" th:if="${#lists.isEmpty(products)}">
+					<h3>No products yet</h3>
+					<p>Add products in the admin dashboard to show them here.</p>
+				</div>
+			</div>
+		</section>
+	</main>
+
+	<footer class="store-footer">
+		<div>Stroyka Storefront</div>
+		<div>© 2026</div>
+	</footer>
+</body>
+
+</html>

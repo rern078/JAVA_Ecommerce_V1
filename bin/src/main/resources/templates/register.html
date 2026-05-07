@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<title>Register</title>
+	<link rel="stylesheet" href="/css/auth.css">
+	<link href='https://unpkg.com/boxicons/css/boxicons.min.css' rel='stylesheet'>
+</head>
+
+<body>
+	<div class="login-container">
+		<div class="profile-img"></div>
+		<h2>CRN TechDev</h2>
+		<p>Register to your account</p>
+
+		<form method="post" action="/register">
+			<div class="input-field">
+				<i class="bx bx-user"></i>
+				<input type="text" name="name" placeholder="Enter Your Name" required>
+			</div>
+
+			<div class="input-field">
+				<i class="bx bx-envelope"></i>
+				<input type="email" name="email" placeholder="Enter Your Email" required>
+			</div>
+
+			<div class="input-field">
+				<i class="bx bx-lock"></i>
+				<input type="password" name="password" placeholder="Enter Your Password" required>
+			</div>
+
+			<button class="btn" type="submit">Register</button>
+
+			<div class="options">
+				Already have an account? <a href="/login">Login</a>
+			</div>
+		</form>
+		<p class="error" th:if="${error}" th:text="${error}">Registration failed.</p>
+	</div>
+</body>
+
+</html>

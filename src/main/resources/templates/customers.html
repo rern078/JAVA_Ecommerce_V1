@@ -13,6 +13,7 @@
 					</div>
 					<div class="card-body">
 						<form id="customer-form">
+							<input type="hidden" id="customer-id" />
 							<div class="row g-3">
 								<div class="mb-3 col-md-4">
 									<label class="form-label" for="customer-name">Name</label>
@@ -248,10 +249,40 @@
 							<th>Exp Mo</th>
 							<th>Exp Yr</th>
 							<th>Created</th>
+              <th>Actions</th>
 						</tr>
 					</thead>
 					<tbody class="table-border-bottom-0" id="customer-table-body">
-						<tr th:each="customer : ${customers}">
+						<tr th:each="customer : ${customers}" th:attr="data-id=${customer.id},
+								data-name=${customer.name},
+								data-last-name=${customer.lastName},
+								data-email=${customer.email},
+								data-phone=${customer.phone},
+								data-customer-class=${customer.customerClass},
+								data-voice-mail=${customer.voiceMail},
+								data-room=${customer.room},
+								data-building=${customer.building},
+								data-address=${customer.address},
+								data-address1=${customer.address1},
+								data-address2=${customer.address2},
+								data-city=${customer.city},
+								data-state=${customer.state},
+								data-postal-code=${customer.postalCode},
+								data-country=${customer.country},
+								data-billing-address=${customer.billingAddress},
+								data-billing-city=${customer.billingCity},
+								data-billing-region=${customer.billingRegion},
+								data-billing-postal-code=${customer.billingPostalCode},
+								data-billing-country=${customer.billingCountry},
+								data-ship-address=${customer.shipAddress},
+								data-ship-city=${customer.shipCity},
+								data-ship-region=${customer.shipRegion},
+								data-ship-postal-code=${customer.shipPostalCode},
+								data-ship-country=${customer.shipCountry},
+								data-credit-card=${customer.creditCard},
+								data-credit-card-type-id=${customer.creditCardTypeId},
+								data-card-exp-mo=${customer.cardExpMo},
+								data-card-exp-yr=${customer.cardExpYr}">
 							<td th:text="${customer.id}"></td>
 							<td th:text="${customer.name}"></td>
 							<td th:text="${customer.lastName}"></td>
@@ -283,9 +314,24 @@
 							<td th:text="${customer.cardExpMo}"></td>
 							<td th:text="${customer.cardExpYr}"></td>
 							<td th:text="${customer.createdAt}"></td>
+              <td>
+								<div class="dropdown">
+									<button type="button" class="btn p-0 dropdown-toggle hide-arrow"
+										data-bs-toggle="dropdown">
+										<i class="bx bx-dots-vertical-rounded"></i>
+									</button>
+									<div class="dropdown-menu">
+										<button class="dropdown-item btn-edit" type="button"><i
+												class="bx bx-edit-alt me-1"></i> Edit</button>
+										<button class="dropdown-item btn-delete" type="button"><i
+												class="bx bx-trash me-1"></i> Delete</button>
+									</div>
+								</div>
+							</td>
 						</tr>
 						<tr th:if="${#lists.isEmpty(customers)}" id="customer-empty">
 							<td>No customers found.</td>
+							<td></td>
 							<td></td>
 							<td></td>
 							<td></td>
@@ -327,6 +373,7 @@
 	<script>
 		(() => {
 			const form = document.getElementById("customer-form");
+			const idInput = document.getElementById("customer-id");
 			const nameInput = document.getElementById("customer-name");
 			const lastNameInput = document.getElementById("customer-last-name");
 			const emailInput = document.getElementById("customer-email");
@@ -364,6 +411,7 @@
 			const emptyRow = document.getElementById("customer-empty");
 
 			const clearForm = () => {
+				idInput.value = "";
 				nameInput.value = "";
 				lastNameInput.value = "";
 				emailInput.value = "";
@@ -394,6 +442,7 @@
 				cardExpMoInput.value = "";
 				cardExpYrInput.value = "";
 				passwordInput.value = "";
+				submitBtn.textContent = "Add Customer";
 				errorEl.style.display = "none";
 				errorEl.textContent = "";
 			};
@@ -423,6 +472,36 @@
 
 			const createRow = (customer) => {
 				const row = document.createElement("tr");
+				row.dataset.id = customer.id ?? "";
+				row.dataset.name = customer.name ?? "";
+				row.dataset.lastName = customer.lastName ?? "";
+				row.dataset.email = customer.email ?? "";
+				row.dataset.phone = customer.phone ?? "";
+				row.dataset.customerClass = customer.customerClass ?? "";
+				row.dataset.voiceMail = customer.voiceMail ?? "";
+				row.dataset.room = customer.room ?? "";
+				row.dataset.building = customer.building ?? "";
+				row.dataset.address = customer.address ?? "";
+				row.dataset.address1 = customer.address1 ?? "";
+				row.dataset.address2 = customer.address2 ?? "";
+				row.dataset.city = customer.city ?? "";
+				row.dataset.state = customer.state ?? "";
+				row.dataset.postalCode = customer.postalCode ?? "";
+				row.dataset.country = customer.country ?? "";
+				row.dataset.billingAddress = customer.billingAddress ?? "";
+				row.dataset.billingCity = customer.billingCity ?? "";
+				row.dataset.billingRegion = customer.billingRegion ?? "";
+				row.dataset.billingPostalCode = customer.billingPostalCode ?? "";
+				row.dataset.billingCountry = customer.billingCountry ?? "";
+				row.dataset.shipAddress = customer.shipAddress ?? "";
+				row.dataset.shipCity = customer.shipCity ?? "";
+				row.dataset.shipRegion = customer.shipRegion ?? "";
+				row.dataset.shipPostalCode = customer.shipPostalCode ?? "";
+				row.dataset.shipCountry = customer.shipCountry ?? "";
+				row.dataset.creditCard = customer.creditCard ?? "";
+				row.dataset.creditCardTypeId = customer.creditCardTypeId ?? "";
+				row.dataset.cardExpMo = customer.cardExpMo ?? "";
+				row.dataset.cardExpYr = customer.cardExpYr ?? "";
 				row.innerHTML = `
 					<td>${displayValue(customer.id)}</td>
 					<td>${displayValue(customer.name)}</td>
@@ -455,6 +534,17 @@
 					<td>${displayValue(customer.cardExpMo)}</td>
 					<td>${displayValue(customer.cardExpYr)}</td>
 					<td>${formatDate(customer.createdAt)}</td>
+					<td>
+						<div class="dropdown">
+							<button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+								<i class="bx bx-dots-vertical-rounded"></i>
+							</button>
+							<div class="dropdown-menu">
+								<button class="dropdown-item btn-edit" type="button"><i class="bx bx-edit-alt me-1"></i> Edit</button>
+								<button class="dropdown-item btn-delete" type="button"><i class="bx bx-trash me-1"></i> Delete</button>
+							</div>
+						</div>
+					</td>
 				`;
 				return row;
 			};
@@ -478,8 +568,12 @@
 				submitBtn.disabled = true;
 
 				try {
-					const response = await fetch("/api/customers", {
-						method: "POST",
+					const id = idInput.value.trim();
+					const url = id ? `/api/customers/${id}` : "/api/customers";
+					const method = id ? "PUT" : "POST";
+
+					const response = await fetch(url, {
+						method,
 						headers: {
 							"Content-Type": "application/json",
 						},
@@ -525,12 +619,85 @@
 						return;
 					}
 
-					appendCustomer(data);
-					clearForm();
+					if (!id) {
+						appendCustomer(data);
+						clearForm();
+					} else {
+						window.location.reload();
+					}
 				} catch (error) {
 					showError(error.message || "Failed to create customer.");
 				} finally {
 					submitBtn.disabled = false;
+				}
+			});
+
+			tableBody?.addEventListener("click", async (event) => {
+				const editBtn = event.target.closest(".btn-edit");
+				const deleteBtn = event.target.closest(".btn-delete");
+				if (!editBtn && !deleteBtn) {
+					return;
+				}
+				const row = event.target.closest("tr");
+				if (!row) {
+					return;
+				}
+
+				if (editBtn) {
+					idInput.value = row.dataset.id || "";
+					nameInput.value = row.dataset.name || "";
+					lastNameInput.value = row.dataset.lastName || "";
+					emailInput.value = row.dataset.email || "";
+					phoneInput.value = row.dataset.phone || "";
+					classInput.value = row.dataset.customerClass || "";
+					voiceMailInput.value = row.dataset.voiceMail || "";
+					roomInput.value = row.dataset.room || "";
+					buildingInput.value = row.dataset.building || "";
+					addressInput.value = row.dataset.address || "";
+					address1Input.value = row.dataset.address1 || "";
+					address2Input.value = row.dataset.address2 || "";
+					cityInput.value = row.dataset.city || "";
+					stateInput.value = row.dataset.state || "";
+					postalCodeInput.value = row.dataset.postalCode || "";
+					countryInput.value = row.dataset.country || "";
+					billingAddressInput.value = row.dataset.billingAddress || "";
+					billingCityInput.value = row.dataset.billingCity || "";
+					billingRegionInput.value = row.dataset.billingRegion || "";
+					billingPostalCodeInput.value = row.dataset.billingPostalCode || "";
+					billingCountryInput.value = row.dataset.billingCountry || "";
+					shipAddressInput.value = row.dataset.shipAddress || "";
+					shipCityInput.value = row.dataset.shipCity || "";
+					shipRegionInput.value = row.dataset.shipRegion || "";
+					shipPostalCodeInput.value = row.dataset.shipPostalCode || "";
+					shipCountryInput.value = row.dataset.shipCountry || "";
+					creditCardInput.value = row.dataset.creditCard || "";
+					creditCardTypeIdInput.value = row.dataset.creditCardTypeId || "";
+					cardExpMoInput.value = row.dataset.cardExpMo || "";
+					cardExpYrInput.value = row.dataset.cardExpYr || "";
+					passwordInput.value = "";
+					submitBtn.textContent = "Update Customer";
+					errorEl.style.display = "none";
+					return;
+				}
+
+				if (deleteBtn) {
+					const id = row.dataset.id;
+					if (!id) {
+						return;
+					}
+					if (!confirm("Delete this customer?")) {
+						return;
+					}
+					try {
+						const response = await fetch(`/api/customers/${id}`, { method: "DELETE" });
+						if (!response.ok) {
+							const text = await response.text();
+							throw new Error(text || "Delete failed.");
+						}
+						window.location.reload();
+					} catch (err) {
+						showError(err.message || "Something went wrong.");
+					}
 				}
 			});
 		})();

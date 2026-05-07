@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	th:replace="fragments/layout :: layout('Categories', ~{::section}, 'categories')">
+<section>
+	<div class="container-xxl flex-grow-1 container-p-y">
+		<h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Categories /</span> Category Form</h4>
+		<div class="row">
+			<div class="col-xl">
+				<div class="card mb-4">
+					<div class="card-header d-flex justify-content-between align-items-center">
+						<h5 class="mb-0">Category Form</h5>
+						<small class="text-muted float-end">Category Form</small>
+					</div>
+					<div class="card-body">
+						<form id="category-form">
+							<input type="hidden" id="category-id" />
+							<div class="row g-3">
+								<div class="mb-3 col-md-6">
+									<label class="form-label" for="category-name">Name</label>
+									<input class="form-control" id="category-name"
+										placeholder="Category name" required />
+								</div>
+								<div class="mb-3 col-md-6">
+									<label class="form-label" for="category-picture">Picture</label>
+									<input class="form-control" id="category-picture" type="file"
+										accept="image/*" />
+									<input id="category-picture-existing" type="hidden" />
+									<small class="text-muted">Select an image to upload.</small>
+									<div class="mt-2">
+										<img id="category-picture-preview" alt="Preview"
+											style="max-height: 80px; display: none;" />
+									</div>
+								</div>
+								<div class="mb-3 col-md-12">
+									<label class="form-label"
+										for="category-description">Description</label>
+									<textarea class="form-control" id="category-description" rows="3"
+										placeholder="Description"></textarea>
+								</div>
+								<div class="mb-3 col-md-12">
+									<div class="form-check">
+										<input class="form-check-input" type="checkbox"
+											id="category-active" />
+										<label class="form-check-label"
+											for="category-active">Active</label>
+									</div>
+								</div>
+								<div class="col-12 d-flex gap-2">
+									<button class="btn btn-primary" type="submit"
+										id="category-submit">Add
+										Category</button>
+									<button class="btn btn-outline-secondary" type="button"
+										id="category-reset">Clear</button>
+								</div>
+								<div class="col-12">
+									<small class="text-danger" id="category-error"
+										style="display:none;"></small>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="card">
+			<h5 class="card-header">Categories List</h5>
+			<div class="table-responsive text-nowrap">
+				<table class="table">
+					<thead>
+						<tr>
+							<th>ID</th>
+							<th>Name</th>
+							<th>Active</th>
+							<th>Description</th>
+							<th>Picture</th>
+							<th>Actions</th>
+						</tr>
+					</thead>
+					<tbody class="table-border-bottom-0">
+						<tr th:each="category : ${categories}" th:attr="data-id=${category.id},
+								data-name=${category.categoryName},
+								data-description=${category.description},
+								data-picture=${category.picture},
+								data-active=${category.active}">
+							<td th:text="${category.id}"></td>
+							<td th:text="${category.categoryName}"></td>
+							<td>
+								<span class="badge"
+									th:classappend="${category.active} ? 'bg-label-success' : 'bg-label-secondary'"
+									th:text="${category.active} ? 'Active' : 'Inactive'"></span>
+							</td>
+							<td th:text="${category.description}"></td>
+							<td>
+								<img th:if="${category.picture}" th:src="${category.picture}"
+									alt="Category" style="max-height: 40px;" />
+								<span th:if="${category.picture == null}">-</span>
+							</td>
+							<td>
+								<div class="dropdown">
+									<button type="button" class="btn p-0 dropdown-toggle hide-arrow"
+										data-bs-toggle="dropdown">
+										<i class="bx bx-dots-vertical-rounded"></i>
+									</button>
+									<div class="dropdown-menu">
+										<button class="dropdown-item btn-edit" type="button"><i
+												class="bx bx-edit-alt me-1"></i> Edit</button>
+										<button class="dropdown-item btn-delete" type="button"><i
+												class="bx bx-trash me-1"></i> Delete</button>
+									</div>
+								</div>
+							</td>
+						</tr>
+						<tr th:if="${#lists.isEmpty(categories)}">
+							<td>No categories found.</td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+		<hr class="my-5" />
+	</div>
+
+	<script>
+		(() => {
+			const form = document.getElementById("category-form");
+			const idInput = document.getElementById("category-id");
+			const nameInput = document.getElementById("category-name");
+			const descInput = document.getElementById("category-description");
+			const pictureInput = document.getElementById("category-picture");
+			const activeInput = document.getElementById("category-active");
+			const existingPictureInput = document.getElementById("category-picture-existing");
+			const picturePreview = document.getElementById("category-picture-preview");
+			const resetBtn = document.getElementById("category-reset");
+			const submitBtn = document.getElementById("category-submit");
+			const errorEl = document.getElementById("category-error");
+
+			const clearForm = () => {
+				idInput.value = "";
+				nameInput.value = "";
+				descInput.value = "";
+				pictureInput.value = "";
+				existingPictureInput.value = "";
+				picturePreview.src = "";
+				picturePreview.style.display = "none";
+				activeInput.checked = false;
+				submitBtn.textContent = "Add Category";
+				errorEl.style.display = "none";
+				errorEl.textContent = "";
+			};
+
+			const showError = (message) => {
+				errorEl.textContent = message;
+				errorEl.style.display = "block";
+			};
+
+			const readFileAsDataUrl = (file) => new Promise((resolve, reject) => {
+				const reader = new FileReader();
+				reader.onload = () => resolve(reader.result);
+				reader.onerror = () => reject(new Error("Failed to read image."));
+				reader.readAsDataURL(file);
+			});
+
+			const uploadImage = async (file) => {
+				const formData = new FormData();
+				formData.append("file", file);
+				const response = await fetch("/api/uploads/categories", {
+					method: "POST",
+					body: formData
+				});
+				if (!response.ok) {
+					const text = await response.text();
+					throw new Error(text || "Image upload failed.");
+				}
+				const data = await response.json();
+				return data.url;
+			};
+
+			pictureInput.addEventListener("change", async () => {
+				const selectedFile = pictureInput.files && pictureInput.files[0];
+				if (!selectedFile) {
+					picturePreview.src = "";
+					picturePreview.style.display = "none";
+					return;
+				}
+				try {
+					const dataUrl = await readFileAsDataUrl(selectedFile);
+					picturePreview.src = dataUrl;
+					picturePreview.style.display = "inline-block";
+				} catch (err) {
+					picturePreview.src = "";
+					picturePreview.style.display = "none";
+				}
+			});
+
+			form.addEventListener("submit", async (event) => {
+				event.preventDefault();
+				errorEl.style.display = "none";
+
+				const selectedFile = pictureInput.files && pictureInput.files[0];
+				let pictureValue = existingPictureInput.value.trim() || null;
+				if (selectedFile) {
+					pictureValue = await uploadImage(selectedFile);
+				}
+
+				const payload = {
+					categoryName: nameInput.value.trim(),
+					description: descInput.value.trim() || null,
+					picture: pictureValue,
+					active: activeInput.checked
+				};
+
+				try {
+					const id = idInput.value;
+					const url = id ? `/api/categories/${id}` : "/api/categories";
+					const method = id ? "PUT" : "POST";
+					const response = await fetch(url, {
+						method,
+						headers: { "Content-Type": "application/json" },
+						body: JSON.stringify(payload)
+					});
+
+					if (!response.ok) {
+						const text = await response.text();
+						throw new Error(text || "Save failed.");
+					}
+
+					window.location.reload();
+				} catch (err) {
+					showError(err.message || "Something went wrong.");
+				}
+			});
+
+			resetBtn.addEventListener("click", clearForm);
+
+			document.querySelectorAll(".btn-edit").forEach((btn) => {
+				btn.addEventListener("click", () => {
+					const row = btn.closest("tr");
+					idInput.value = row.dataset.id || "";
+					nameInput.value = row.dataset.name || "";
+					descInput.value = row.dataset.description || "";
+					existingPictureInput.value = row.dataset.picture || "";
+					pictureInput.value = "";
+					if (existingPictureInput.value) {
+						picturePreview.src = existingPictureInput.value;
+						picturePreview.style.display = "inline-block";
+					} else {
+						picturePreview.src = "";
+						picturePreview.style.display = "none";
+					}
+					activeInput.checked = row.dataset.active === "true";
+					submitBtn.textContent = "Update Category";
+					errorEl.style.display = "none";
+				});
+			});
+
+			document.querySelectorAll(".btn-delete").forEach((btn) => {
+				btn.addEventListener("click", async () => {
+					const row = btn.closest("tr");
+					const id = row.dataset.id;
+					if (!id) {
+						return;
+					}
+					if (!confirm("Delete this category?")) {
+						return;
+					}
+					try {
+						const response = await fetch(`/api/categories/${id}`, { method: "DELETE" });
+						if (!response.ok) {
+							const text = await response.text();
+							throw new Error(text || "Delete failed.");
+						}
+						window.location.reload();
+					} catch (err) {
+						showError(err.message || "Something went wrong.");
+					}
+				});
+			});
+
+			dataTables(".table", { pageLength: 10 });
+		})();
+	</script>
+</section>
+
+</html>
